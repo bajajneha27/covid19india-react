@@ -15,6 +15,7 @@ import Links from './components/links';
 import FAQ from './components/faq';
 import Banner from './components/banner';
 import PatientDB from './components/patientdb';
+import Resources from './components/resources'
 import DeepDive from './components/deepdive';
 
 const history = require('history').createBrowserHistory;
@@ -26,6 +27,12 @@ function App() {
       view: Home,
       displayName: 'Home',
       animationDelayForNavbar: 0.2,
+    },
+    {
+      pageLink: '/resources',
+      view: Resources,
+      displayName: 'Resources',
+      animationDelayForNavbar: 0.3,
     },
     {
       pageLink: '/demographics',
