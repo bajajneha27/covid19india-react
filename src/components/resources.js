@@ -84,10 +84,10 @@ function Resources(props) {
         <div className="home-right">
           {fetched && (
             <React.Fragment>
-              {/* <ResourcesMap
-                resources={resourcesData}
+              <ResourcesMap
+                data={resourcesData}
                 regionHighlighted={regionHighlighted}
-              /> */}
+              />
             </React.Fragment>
           )}
         </div>

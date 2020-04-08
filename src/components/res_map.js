@@ -207,15 +207,15 @@ const mapMeta = {
   },
 };
 
-export default function ({states, stateDistrictWiseData, regionHighlighted}) {
+export default function ({data, regionHighlighted}) {
   const [selectedRegion, setSelectedRegion] = useState({});
   const [currentHoveredRegion, setCurrentHoveredRegion] = useState({});
   const [currentMap, setCurrentMap] = useState(mapMeta.India);
 
   useEffect(() => {
-    const region = getRegionFromState(states[1]);
+    const region = data.states[0];
     setCurrentHoveredRegion(region);
-  }, [states]);
+  }, [data]);
 
   if (!currentHoveredRegion) {
     return null;
@@ -226,59 +226,64 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
     let currentMapData = {};
 
     if (currentMap.mapType === MAP_TYPES.COUNTRY) {
-      currentMapData = states.reduce((acc, state) => {
-        if (state.state === 'Total') {
-          return acc;
-        }
-        const confirmed = parseInt(state.confirmed);
-        statistic.total += confirmed;
-        if (confirmed > statistic.maxConfirmed) {
-          statistic.maxConfirmed = confirmed;
+      currentMapData = data.states.reduce((acc, state) => {
+        const beds = parseInt(state.total.beds);
+        statistic.total += beds;
+        if (beds < statistic.maxConfirmed) {
+          statistic.maxConfirmed = beds;
         }
 
-        acc[state.state] = state.confirmed;
+        acc[state.name] = state.total.beds;
         return acc;
       }, {});
     } else if (currentMap.mapType === MAP_TYPES.STATE) {
-      const districtWiseData = (
-        stateDistrictWiseData[currentMap.name] || {districtData: {}}
-      ).districtData;
-      currentMapData = Object.keys(districtWiseData).reduce((acc, district) => {
-        const confirmed = parseInt(districtWiseData[district].confirmed);
-        statistic.total += confirmed;
-        if (confirmed > statistic.maxConfirmed) {
-          statistic.maxConfirmed = confirmed;
+      const stateObj = data.states.filter((t) => {
+        return t.name === currentMap.name;
+      })[0];
+      currentMapData = stateObj.districts.reduce((acc, district) => {
+        const beds = parseInt(stateObj.total.beds);
+        statistic.total += beds;
+        if (beds < statistic.maxConfirmed) {
+          statistic.maxConfirmed = beds;
         }
-        acc[district] = districtWiseData[district].confirmed;
+        acc[district.name] = district.total.beds;
         return acc;
       }, {});
     }
     return [statistic, currentMapData];
-  }, [currentMap, states, stateDistrictWiseData]);
+  }, [currentMap, data]);
 
   const setHoveredRegion = useCallback(
     (name, currentMap) => {
       if (currentMap.mapType === MAP_TYPES.COUNTRY) {
         setCurrentHoveredRegion(
-          getRegionFromState(states.filter((state) => name === state.state)[0])
+          data.states.filter((state) => {
+            return name === state.name;
+          })[0]
         );
       } else if (currentMap.mapType === MAP_TYPES.STATE) {
-        const state = stateDistrictWiseData[currentMap.name] || {
-          districtData: {},
-        };
-        let districtData = state.districtData[name];
+        const stateObj = data.states.filter((t) => {
+          return t.name === currentMap.name;
+        })[0];
+        let districtData = stateObj.districts.filter((t) => {
+          return t.name === name;
+        })[0];
         if (!districtData) {
           districtData = {
-            confirmed: 0,
-            active: 0,
-            deaths: 0,
-            recovered: 0,
+            name: 'Unknown',
+            total: {
+              beds: 0,
+              icu_beds: 0,
+              ventilators: 0,
+              doctors: 0,
+              nurses: 0
+            }
           };
         }
-        setCurrentHoveredRegion(getRegionFromDistrict(districtData, name));
+        setCurrentHoveredRegion(districtData);
       }
     },
-    [stateDistrictWiseData, states]
+    [data]
   );
 
   useEffect(() => {
@@ -292,7 +297,7 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
     if (isState) {
       const newMap = mapMeta['India'];
       setCurrentMap(newMap);
-      const region = getRegionFromState(regionHighlighted.state);
+      const region = regionHighlighted.state;
       setCurrentHoveredRegion(region);
       setSelectedRegion(region.name);
     } else {
@@ -306,27 +311,27 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
     }
   }, [regionHighlighted, currentMap.mapType, setHoveredRegion]);
 
-  const getRegionFromDistrict = (districtData, name) => {
-    if (!districtData) {
-      return;
-    }
-    const region = {...districtData};
-    if (!region.name) {
-      region.name = name;
-    }
-    return region;
-  };
+  // const getRegionFromDistrict = (districtData, name) => {
+  //   if (!districtData) {
+  //     return;
+  //   }
+  //   const region = {...districtData};
+  //   if (!region.name) {
+  //     region.name = name;
+  //   }
+  //   return region;
+  // };
 
-  const getRegionFromState = (state) => {
-    if (!state) {
-      return;
-    }
-    const region = {...state};
-    if (!region.name) {
-      region.name = region.state;
-    }
-    return region;
-  };
+  // const getRegionFromState = (state) => {
+  //   if (!state) {
+  //     return;
+  //   }
+  //   const region = {...state};
+  //   if (!region.name) {
+  //     region.name = region.state;
+  //   }
+  //   return region;
+  // };
 
   const switchMapToState = useCallback(
     (name) => {
@@ -336,19 +341,23 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
       }
       setCurrentMap(newMap);
       if (newMap.mapType === MAP_TYPES.COUNTRY) {
-        setHoveredRegion(states[1].state, newMap);
+        setHoveredRegion(data.states[0].name, newMap);
       } else if (newMap.mapType === MAP_TYPES.STATE) {
-        const districtData = (stateDistrictWiseData[name] || {districtData: {}})
-          .districtData;
-        const topDistrict = Object.keys(districtData)
-          .filter((name) => name !== 'Unknown')
+        const stateObj = data.states.filter((t) => {
+          return t.name === name;
+        })[0];
+        let districtData = stateObj.districts.filter((t) => {
+          return t.name === name;
+        })[0];
+        const topDistrict = stateObj.districts
+          .filter((state) => state.name !== 'Unknown')
           .sort((a, b) => {
-            return districtData[b].confirmed - districtData[a].confirmed;
+            return a.total.beds - b.total.beds;
           })[0];
         setHoveredRegion(topDistrict, newMap);
       }
     },
-    [setHoveredRegion, stateDistrictWiseData, states]
+    [setHoveredRegion, data]
   );
   const {name, lastupdatedtime} = currentHoveredRegion;
 
@@ -365,9 +374,9 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
 
       <div className="map-stats">
         <div className="stats fadeInUp" style={{animationDelay: '2s'}}>
-          <h5>Confirmed</h5>
+          <h5>Beds</h5>
           <div className="stats-bottom">
-            <h1>{currentHoveredRegion.confirmed}</h1>
+            <h1>{currentHoveredRegion.total && currentHoveredRegion.total.beds || '-'}</h1>
             <h6>{}</h6>
           </div>
         </div>
@@ -376,37 +385,49 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
           className="stats is-blue fadeInUp"
           style={{animationDelay: '2.1s'}}
         >
-          <h5>Active</h5>
+          <h5>ICU Beds</h5>
           <div className="stats-bottom">
-            <h1>{currentHoveredRegion.active || ''}</h1>
+            <h1>{currentHoveredRegion.total && currentHoveredRegion.total.icu_beds || '-'}</h1>
+            <h6>{}</h6>
+          </div>
+        </div>
+
+        <div
+          className="stats is-blue fadeInUp"
+          style={{animationDelay: '2.2s'}}
+        >
+          <h5>Ventilators</h5>
+          <div className="stats-bottom">
+            <h1>{currentHoveredRegion.total && currentHoveredRegion.total.ventilators || '-'}</h1>
             <h6>{}</h6>
           </div>
         </div>
 
         <div
           className="stats is-green fadeInUp"
-          style={{animationDelay: '2.2s'}}
+          style={{animationDelay: '2.3s'}}
         >
-          <h5>Recovered</h5>
+          <h5>Doctors</h5>
           <div className="stats-bottom">
-            <h1>{currentHoveredRegion.recovered || ''}</h1>
+            <h1>{currentHoveredRegion.total && currentHoveredRegion.total.doctors || '-'}</h1>
             <h6>{}</h6>
           </div>
         </div>
+      
 
         <div
-          className="stats is-gray fadeInUp"
-          style={{animationDelay: '2.3s'}}
+          className="stats is-green fadeInUp"
+          style={{animationDelay: '2.4s'}}
         >
-          <h5>Deceased</h5>
+          <h5>Nurses</h5>
           <div className="stats-bottom">
-            <h1>{currentHoveredRegion.deaths || ''}</h1>
+            <h1>{currentHoveredRegion.total && currentHoveredRegion.total.nurses || '-'}</h1>
             <h6>{}</h6>
           </div>
         </div>
       </div>
 
-      <div className="meta fadeInUp" style={{animationDelay: '2.4s'}}>
+      <div className="meta fadeInUp" style={{animationDelay: '2.5s'}}>
         <h2>{name}</h2>
         {lastupdatedtime && (
           <div
