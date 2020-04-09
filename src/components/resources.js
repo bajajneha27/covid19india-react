@@ -52,7 +52,7 @@ function Resources(props) {
             <div className="header-mid">
               <div className="titles">
                 <h1>Medical Resources</h1>
-                <h6 style={{fontWeight: 600}}>Based on crowdsourced data</h6>
+                <h6 style={{fontWeight: 600}}>Proposed addition to covid tracker</h6>
               </div>
               <div className="last-update">
                 <h6>Last Updated</h6>
