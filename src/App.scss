@@ -1324,15 +1324,11 @@ h6 {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    padding: 1rem;
 
     &.timeline {
       display: flex;
       flex-direction: column;
       justify-content: space-around;
-      padding: 1rem;
-      position: absolute;
-      top: 13.25rem;
 
       .highlight {
         color: $brown !important;
@@ -1409,7 +1405,7 @@ h6 {
 
 .Timeline {
   cursor: pointer;
-  height: 3rem;
+  height: 2rem;
   width: 30rem;
   will-change: transform;
 
@@ -3254,7 +3250,6 @@ footer {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin-top: 1.75rem;
     width: calc(100% - 10rem);
 
     h1 {

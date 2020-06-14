@@ -28,8 +28,6 @@ const Minigraph = lazy(() =>
 
 const Footer = lazy(() => import('./footer' /* webpackChunkName: "Footer" */));
 
-const Search = lazy(() => import('./search' /* webpackChunkName: "Search" */));
-
 const Level = lazy(() => import('./level' /* webpackChunkName: "Level" */));
 
 function Home(props) {
@@ -89,9 +87,7 @@ function Home(props) {
       <div className="Home">
         <div className="home-left">
           <div className="header">
-            <Suspense fallback={<div />}>
-              <Search />
-            </Suspense>
+            <Suspense fallback={<div />}></Suspense>
 
             {timeseries && (
               <Suspense fallback={<div style={{minHeight: '56px'}} />}>
