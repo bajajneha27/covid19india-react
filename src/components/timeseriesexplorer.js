@@ -5,7 +5,7 @@ import {
   TIMESERIES_CHART_TYPES,
   TIMESERIES_OPTIONS,
 } from '../constants';
-import {getIndiaYesterdayISO, parseIndiaDate} from '../utils/commonfunctions';
+import {getIndiaTodayISO, parseIndiaDate} from '../utils/commonfunctions';
 
 import 'intersection-observer';
 
@@ -42,7 +42,7 @@ function TimeSeriesExplorer({
   const isVisible = useIsVisible(explorerElement, {once: true});
 
   const dates = useMemo(() => {
-    const today = timelineDate || getIndiaYesterdayISO();
+    const today = timelineDate || getIndiaTodayISO();
     const cutOffDate = formatISO(
       sub(parseIndiaDate(today), timeseriesOption.constraint),
       {

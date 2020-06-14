@@ -42,7 +42,7 @@ function Home(props) {
   const [date, setDate] = useState('');
 
   const {data: timeseries} = useStickySWR(
-    'https://api.covid19india.org/v3/min/timeseries.min.json',
+    'https://vics-core.github.io/covid-api/predictions.json',
     fetcher,
     {
       revalidateOnFocus: false,
