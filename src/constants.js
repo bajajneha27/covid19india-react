@@ -49,9 +49,18 @@ export const TIMESERIES_CHART_TYPES = {
 };
 
 export const TIMESERIES_OPTIONS = {
-  BEGINNING: 'Beginning',
-  MONTH: '1 Month',
-  TWO_WEEKS: '2 Weeks',
+  END: {
+    label: 'End',
+    constraint: {},
+  },
+  MONTH: {
+    label: '1 Month',
+    constraint: {months: 1},
+  },
+  TWO_WEEKS: {
+    label: '2 Weeks',
+    constraint: {weeks: 2},
+  },
 };
 
 export const MAP_OPTIONS = {
