@@ -49,17 +49,17 @@ export const TIMESERIES_CHART_TYPES = {
 };
 
 export const TIMESERIES_OPTIONS = {
-  END: {
-    label: 'End',
-    constraint: {},
+  TWO_WEEKS: {
+    label: '2 Weeks',
+    constraint: {weeks: 2},
   },
   MONTH: {
     label: '1 Month',
     constraint: {months: 1},
   },
-  TWO_WEEKS: {
-    label: '2 Weeks',
-    constraint: {weeks: 2},
+  END: {
+    label: 'End',
+    constraint: {},
   },
 };
 

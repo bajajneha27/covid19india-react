@@ -11,7 +11,7 @@ import 'intersection-observer';
 
 import {PinIcon, IssueOpenedIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
-import {formatISO, sub} from 'date-fns';
+import {formatISO, add} from 'date-fns';
 import equal from 'fast-deep-equal';
 import React, {useMemo, useRef, useState, lazy, Suspense} from 'react';
 import {useTranslation} from 'react-i18next';
@@ -44,14 +44,14 @@ function TimeSeriesExplorer({
   const dates = useMemo(() => {
     const today = timelineDate || getIndiaTodayISO();
     const cutOffDate = formatISO(
-      sub(parseIndiaDate(today), timeseriesOption.constraint),
+      add(parseIndiaDate(today), timeseriesOption.constraint),
       {
         representation: 'date',
       }
     );
     let pastDates = Object.keys(timeseries || {});
     if (cutOffDate !== today)
-      pastDates = pastDates.filter((date) => date >= cutOffDate);
+      pastDates = pastDates.filter((date) => date <= cutOffDate);
     return pastDates;
   }, [timeseries, timelineDate, timeseriesOption]);
 
@@ -152,7 +152,7 @@ function TimeSeriesExplorer({
         <Suspense fallback={<TimeseriesLoader />}>
           <TimeSeries
             stateCode={regionHighlighted.stateCode}
-            {...{timeseries, dates, chartType, isUniform, isLog}}
+            {...{timeseries, dates, chartType, isUniform, isLog, timelineDate}}
           />
         </Suspense>
       )}

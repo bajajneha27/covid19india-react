@@ -1,5 +1,6 @@
 import {fetcher} from '../utils/commonfunctions';
 
+import {format} from 'date-fns';
 import React, {useMemo, useState, useEffect, lazy, Suspense} from 'react';
 import DatePicker from 'react-date-picker';
 import * as Icon from 'react-feather';
@@ -7,10 +8,6 @@ import {useTranslation} from 'react-i18next';
 import {useSpring, animated, useTrail, config} from 'react-spring';
 import {useLocalStorage} from 'react-use';
 import useSWR from 'swr';
-
-const Timeline = lazy(() =>
-  import('./timeline' /* webpackChunkName: "Timeline" */)
-);
 
 const Updates = lazy(() =>
   import('./updates' /* webpackChunkName: "Updates" */)
@@ -145,8 +142,9 @@ const ActionsPanel = ({
             maxDate={maxDate}
             calendarIcon={<Icon.Calendar />}
             clearIcon={<Icon.XCircle />}
-            format="dd/MM/yyyy"
+            format="dd/MM/y"
             onChange={(date) => {
+              setDate(format(date, 'yyyy-MM-dd'));
               setSelectedDate(date);
             }}
           />
@@ -157,21 +155,6 @@ const ActionsPanel = ({
             {Bell}
             {newUpdate && <div className="indicator"></div>}
           </animated.div>
-        )}
-      </animated.div>
-
-      <animated.div
-        className="actions timeline"
-        style={{
-          opacity,
-          transform: transform.interpolate((t) => `${t} rotateX(180deg)`),
-          pointerEvents: !isTimelineMode ? 'none' : '',
-        }}
-      >
-        {isTimelineMode && (
-          <Suspense fallback={<div />}>
-            <Timeline {...{setIsTimelineMode, setDate, dates}} />
-          </Suspense>
         )}
       </animated.div>
     </React.Fragment>

@@ -26,18 +26,21 @@ import equal from 'fast-deep-equal';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 
-function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
+function TimeSeries({
+  timeseries,
+  dates,
+  chartType,
+  isUniform,
+  isLog,
+  timelineDate,
+}) {
   const {t} = useTranslation();
   const refs = useRef([]);
 
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef);
 
-  const [highlightedDate, setHighlightedDate] = useState();
-
-  useEffect(() => {
-    setHighlightedDate(dates[dates.length - 1]);
-  }, [dates]);
+  const [highlightedDate, setHighlightedDate] = useState(timelineDate);
 
   useEffect(() => {
     const T = dates.length;
