@@ -87,7 +87,9 @@ export const ZONE_COLORS = {
 };
 
 export const MAPS_DIR =
-  process.env.NODE_ENV === 'production' ? '/mini_maps' : '/maps';
+  process.env.NODE_ENV === 'production'
+    ? `${process.env.PUBLIC_URL}/mini_maps`
+    : '/maps';
 
 export const MAP_META = {
   AP: {
