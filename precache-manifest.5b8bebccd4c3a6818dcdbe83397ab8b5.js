@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "c97799cad2cfb277fdfa2cf7d08aabe7",
+    "revision": "4fa64e0edfc9e5c6a21fba5e628e16ac",
     "url": "https://bajajneha27.github.io/covid19india-react/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "https://bajajneha27.github.io/covid19india-react/static/css/2.ab33d419.chunk.css"
   },
   {
-    "revision": "d0b4c865506902eb5efd",
+    "revision": "4204849cccbcecb58782",
     "url": "https://bajajneha27.github.io/covid19india-react/static/css/App.264e1a4c.chunk.css"
   },
   {
@@ -92,8 +92,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "https://bajajneha27.github.io/covid19india-react/static/js/Actions.afd13504.chunk.js"
   },
   {
-    "revision": "d0b4c865506902eb5efd",
-    "url": "https://bajajneha27.github.io/covid19india-react/static/js/App.40031ea4.chunk.js"
+    "revision": "4204849cccbcecb58782",
+    "url": "https://bajajneha27.github.io/covid19india-react/static/js/App.dd7b32ce.chunk.js"
   },
   {
     "revision": "4fe4bed6beaad26daaab",
@@ -168,8 +168,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "https://bajajneha27.github.io/covid19india-react/static/js/main.0025b360.chunk.js"
   },
   {
-    "revision": "76541526894a0a09af98",
-    "url": "https://bajajneha27.github.io/covid19india-react/static/js/runtime-main.95f78455.js"
+    "revision": "25575e3ebc5f8bfa1f73",
+    "url": "https://bajajneha27.github.io/covid19india-react/static/js/runtime-main.0073f366.js"
   },
   {
     "revision": "013f0b90a4cae7b8bbf13e3fd9e7dc4a",
