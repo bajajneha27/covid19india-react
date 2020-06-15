@@ -74,14 +74,9 @@ function Navbar({
       </div>
 
       <div className="navbar-middle">
-        <Link
-          to="/"
-          onClick={() => {
-            setExpand(false);
-          }}
-        >
-          Covid19<span>India</span>
-        </Link>
+        <a href="https://indiacovid.seva.ml">
+          Blog <span>Home</span>
+        </a>
       </div>
 
       <div
@@ -106,7 +101,7 @@ function Navbar({
                 <Icon.Home {...activeNavIcon('/')} />
               </Link>
             </span>
-            <span>
+            {/* <span>
               <Link to="/demographics">
                 <Icon.Users {...activeNavIcon('/demographics')} />
               </Link>
@@ -120,7 +115,7 @@ function Navbar({
               <Link to="/about">
                 <Icon.HelpCircle {...activeNavIcon('/about')} />
               </Link>
-            </span>
+            </span> */}
             <span>{windowSize.width > 768 && <SunMoon {...{darkMode}} />}</span>
           </React.Fragment>
         )}
@@ -174,9 +169,9 @@ function Expand({pages, setExpand, darkMode, windowSize}) {
 
       {windowSize.width < 768 && <SunMoon {...{darkMode}} />}
 
-      <div className="expand-bottom">
+      {/* <div className="expand-bottom">
         <h5>{t('A crowdsourced initiative.')}</h5>
-      </div>
+      </div> */}
     </div>
   );
 }

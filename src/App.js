@@ -58,19 +58,19 @@ function App() {
       pageLink: '/demographics',
       view: Demographics,
       displayName: 'Demographics',
-      showInNavbar: true,
+      showInNavbar: false,
     },
     {
       pageLink: '/essentials',
       view: Essentials,
       displayName: 'Essentials',
-      showInNavbar: true,
+      showInNavbar: false,
     },
     {
       pageLink: '/about',
       view: FAQ,
       displayName: 'About',
-      showInNavbar: true,
+      showInNavbar: false,
     },
     {
       pageLink: '/state/:stateCode',

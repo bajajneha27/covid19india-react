@@ -270,6 +270,7 @@ function MapExplorer({
         {hidden: anchor && anchor !== 'mapexplorer'}
       )}
     >
+{/*
       {window.innerWidth > 769 && (
         <div
           className={classnames('anchor', {stickied: anchor === 'mapexplorer'})}
@@ -343,6 +344,7 @@ function MapExplorer({
           </div>
         ))}
       </div>
+
 
       <div className="meta">
         {currentMapMeta.mapType === MAP_TYPES.STATE && (
@@ -462,6 +464,7 @@ function MapExplorer({
           {t('source')}
         </a>
       </h6>
+*/}
     </div>
   );
 }

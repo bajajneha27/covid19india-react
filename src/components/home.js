@@ -4,7 +4,7 @@ import {fetcher} from '../utils/commonfunctions';
 
 import 'intersection-observer';
 
-import React, {useState, useRef, lazy, Suspense} from 'react';
+import React, {useState, useRef, lazy, Suspense, useEffect} from 'react';
 import {Helmet} from 'react-helmet';
 import {useIsVisible} from 'react-is-visible';
 
@@ -38,8 +38,8 @@ function Home(props) {
 
   const [anchor, setAnchor] = useState(null);
   const [mapStatistic, setMapStatistic] = useState('active');
-
-  const [date, setDate] = useState('');
+  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+  const [data, setData] = useState({});
 
   const {data: timeseries} = useStickySWR(
     'https://vics-core.github.io/covid-api/predictions.json',
@@ -49,17 +49,16 @@ function Home(props) {
     }
   );
 
-  const {data} = useStickySWR(
-    `https://api.covid19india.org/v3/min/data${
-      date ? `-${date}` : ''
-    }.min.json`,
-    fetcher,
-    {
-      revalidateOnMount: true,
-      refreshInterval: 100000,
-      revalidateOnFocus: false,
+  useEffect(()=>{
+    console.log("Setting data");
+    var ret = {};
+    for (var st in timeseries) {
+      ret[st] = timeseries[st][date];
     }
-  );
+    setData(ret);
+    console.log(data);
+  }, [timeseries, date]);
+
 
   const homeRightElement = useRef();
   const isVisible = useIsVisible(homeRightElement, {once: true});
@@ -102,7 +101,7 @@ function Home(props) {
             )}
           </div>
 
-          {data && (
+          {data['TT'] && (
             <Suspense fallback={<div />}>
               <Level data={data['TT']} />
             </Suspense>
@@ -114,11 +113,12 @@ function Home(props) {
             )}
           </Suspense>
 
-          <Suspense fallback={<div />}>
-            {data && (
+          {data['TT'] && (
+            <Suspense fallback={<div />}>
               <Table {...{data, regionHighlighted, setRegionHighlighted}} />
-            )}
-          </Suspense>
+            </Suspense>
+          )}
+
         </div>
 
         <div className="home-right" ref={homeRightElement}>

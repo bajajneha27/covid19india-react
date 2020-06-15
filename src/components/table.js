@@ -61,10 +61,10 @@ function PureFineprintTop() {
   return (
     <React.Fragment>
       <h5 className="text">
-        {t('Compiled from State Govt. numbers')},{' '}
-        <Link to="/about" style={{color: '#6c757d'}}>
+        {t('Recovered and Deceased are statically computed.')},{' '}
+        {/* <Link to="/about" style={{color: '#6c757d'}}>
           {t('know more')}!
-        </Link>
+        </Link> */}
       </h5>
     </React.Fragment>
   );

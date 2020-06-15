@@ -150,12 +150,12 @@ const ActionsPanel = ({
           />
         </animated.div>
 
-        {!showUpdates && (
+        {/* {!showUpdates && (
           <animated.div className="bell-icon" style={trail[1]}>
             {Bell}
             {newUpdate && <div className="indicator"></div>}
           </animated.div>
-        )}
+        )} */}
       </animated.div>
     </React.Fragment>
   );

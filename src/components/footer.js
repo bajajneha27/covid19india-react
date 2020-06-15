@@ -7,20 +7,20 @@ function Footer(props) {
 
   return (
     <footer className="fadeInUp" style={{animationDelay: '2s'}}>
-      <h5>{t('We stand with everyone fighting on the frontlines')}</h5>
+      <h5>{t('Based on Covid19India Tracker')}</h5>
 
       <div className="link">
         <a
-          href="https://github.com/covid19india"
+          href="https://indiacovid.seva.ml"
           target="_blank"
           rel="noopener noreferrer"
         >
-          covid19india
+          BLOG HOME
         </a>
       </div>
 
       <a
-        href="https://github.com/covid19india/covid19india-react"
+        href="https://github.com/vics-core/"
         className="button github"
         target="_blank"
         rel="noopener noreferrer"
@@ -29,7 +29,7 @@ function Footer(props) {
         <span>{t('Open Sourced on GitHub')}</span>
       </a>
 
-      <a
+      {/* <a
         className="button excel"
         href="http://patientdb.covid19india.org"
         target="_blank"
@@ -58,7 +58,7 @@ function Footer(props) {
       >
         <Icon.MessageCircle />
         <span>{t('Join Telegram to Collaborate!')}</span>
-      </a>
+      </a> */}
     </footer>
   );
 }
