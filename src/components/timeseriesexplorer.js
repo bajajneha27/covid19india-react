@@ -5,13 +5,13 @@ import {
   TIMESERIES_CHART_TYPES,
   TIMESERIES_OPTIONS,
 } from '../constants';
-import {getIndiaYesterdayISO, parseIndiaDate} from '../utils/commonfunctions';
+import {getIndiaTodayISO, parseIndiaDate} from '../utils/commonfunctions';
 
 import 'intersection-observer';
 
 import {PinIcon, IssueOpenedIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
-import {formatISO, sub} from 'date-fns';
+import {formatISO, add} from 'date-fns';
 import equal from 'fast-deep-equal';
 import React, {useMemo, useRef, useState, lazy, Suspense} from 'react';
 import {useTranslation} from 'react-i18next';
@@ -42,22 +42,16 @@ function TimeSeriesExplorer({
   const isVisible = useIsVisible(explorerElement, {once: true});
 
   const dates = useMemo(() => {
-    const today = timelineDate || getIndiaYesterdayISO();
-    const pastDates = Object.keys(timeseries || {}).filter(
-      (date) => date <= today
+    const today = timelineDate || getIndiaTodayISO();
+    const cutOffDate = formatISO(
+      add(parseIndiaDate(today), timeseriesOption.constraint),
+      {
+        representation: 'date',
+      }
     );
-
-    if (timeseriesOption === TIMESERIES_OPTIONS.TWO_WEEKS) {
-      const cutOffDate = formatISO(sub(parseIndiaDate(today), {weeks: 2}), {
-        representation: 'date',
-      });
-      return pastDates.filter((date) => date >= cutOffDate);
-    } else if (timeseriesOption === TIMESERIES_OPTIONS.MONTH) {
-      const cutOffDate = formatISO(sub(parseIndiaDate(today), {months: 1}), {
-        representation: 'date',
-      });
-      return pastDates.filter((date) => date >= cutOffDate);
-    }
+    let pastDates = Object.keys(timeseries || {});
+    if (cutOffDate !== today)
+      pastDates = pastDates.filter((date) => date <= cutOffDate);
     return pastDates;
   }, [timeseries, timelineDate, timeseriesOption]);
 
@@ -158,7 +152,7 @@ function TimeSeriesExplorer({
         <Suspense fallback={<TimeseriesLoader />}>
           <TimeSeries
             stateCode={regionHighlighted.stateCode}
-            {...{timeseries, dates, chartType, isUniform, isLog}}
+            {...{timeseries, dates, chartType, isUniform, isLog, timelineDate}}
           />
         </Suspense>
       )}
@@ -166,12 +160,12 @@ function TimeSeriesExplorer({
       <div className="pills">
         {Object.values(TIMESERIES_OPTIONS).map((option) => (
           <button
-            key={option}
+            key={option.label}
             type="button"
             className={classnames({selected: timeseriesOption === option})}
             onClick={() => setTimeseriesOption(option)}
           >
-            {t(option)}
+            {t(option.label)}
           </button>
         ))}
       </div>

@@ -1,16 +1,13 @@
 import {fetcher} from '../utils/commonfunctions';
 
-import {parse, format} from 'date-fns';
-import {utcToZonedTime} from 'date-fns-tz';
+import {format} from 'date-fns';
 import React, {useMemo, useState, useEffect, lazy, Suspense} from 'react';
+import DatePicker from 'react-date-picker';
 import * as Icon from 'react-feather';
+import {useTranslation} from 'react-i18next';
 import {useSpring, animated, useTrail, config} from 'react-spring';
 import {useLocalStorage} from 'react-use';
 import useSWR from 'swr';
-
-const Timeline = lazy(() =>
-  import('./timeline' /* webpackChunkName: "Timeline" */)
-);
 
 const Updates = lazy(() =>
   import('./updates' /* webpackChunkName: "Updates" */)
@@ -82,6 +79,12 @@ const ActionsPanel = ({
   setNewUpdate,
   setShowUpdates,
 }) => {
+  const today = new Date();
+  const [selectedDate, setSelectedDate] = useState(today);
+  const minDate = today;
+  const maxDate = new Date('31-DEC-2020');
+  const {t} = useTranslation();
+
   const Bell = useMemo(
     () => (
       <Icon.Bell
@@ -105,29 +108,6 @@ const ActionsPanel = ({
     [setShowUpdates, showUpdates]
   );
 
-  const TimelineIcon = useMemo(
-    () => (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="-.2 -.2 17 17"
-        width="16"
-        height="16"
-      >
-        <path
-          fillRule="evenodd"
-          d="M1.643 3.143L.427 1.927A.25.25 0 000 2.104V5.75c0 
-          .138.112.25.25.25h3.646a.25.25 0 00.177-.427L2.715 
-          4.215a6.5 6.5 0 11-1.18 4.458.75.75 0 10-1.493.154 
-          8.001 8.001 0 101.6-5.684zM7.75 4a.75.75 0 
-          01.75.75v2.992l2.028.812a.75.75 0 01-.557 
-          1.392l-2.5-1A.75.75 0 017 8.25v-3.5A.75.75 
-          0 017.75 4z"
-        ></path>
-      </svg>
-    ),
-    []
-  );
-
   const {transform, opacity} = useSpring({
     opacity: isTimelineMode ? 1 : 0,
     transform: `perspective(600px) rotateX(${isTimelineMode ? 180 : 0}deg)`,
@@ -143,13 +123,6 @@ const ActionsPanel = ({
     config: config.stiff,
   });
 
-  const getTimeFromMilliseconds = (lastViewedLog) => {
-    return format(
-      utcToZonedTime(parse(lastViewedLog, 'T', new Date()), 'Asia/Kolkata'),
-      'dd MMM, p'
-    );
-  };
-
   return (
     <React.Fragment>
       <animated.div
@@ -160,42 +133,28 @@ const ActionsPanel = ({
           pointerEvents: isTimelineMode ? 'none' : '',
         }}
       >
-        <animated.h5 style={trail[0]}>{`${getTimeFromMilliseconds(
-          lastViewedLog
-        )} IST`}</animated.h5>
+        {showUpdates && BellOff}
+        <animated.h5 style={trail[0]}>{t('Select a future date')}:</animated.h5>
+        <animated.div className="date-picker">
+          <DatePicker
+            value={selectedDate}
+            minDate={minDate}
+            maxDate={maxDate}
+            calendarIcon={<Icon.Calendar />}
+            clearIcon={<Icon.XCircle />}
+            format="dd/MM/y"
+            onChange={(date) => {
+              setDate(format(date, 'yyyy-MM-dd'));
+              setSelectedDate(date);
+            }}
+          />
+        </animated.div>
 
         {!showUpdates && (
           <animated.div className="bell-icon" style={trail[1]}>
             {Bell}
             {newUpdate && <div className="indicator"></div>}
           </animated.div>
-        )}
-
-        {showUpdates && BellOff}
-        <animated.div
-          className="timeline-icon"
-          onClick={() => {
-            setIsTimelineMode(true);
-            if (showUpdates) setShowUpdates(!showUpdates);
-          }}
-          style={trail[2]}
-        >
-          {TimelineIcon}
-        </animated.div>
-      </animated.div>
-
-      <animated.div
-        className="actions timeline"
-        style={{
-          opacity,
-          transform: transform.interpolate((t) => `${t} rotateX(180deg)`),
-          pointerEvents: !isTimelineMode ? 'none' : '',
-        }}
-      >
-        {isTimelineMode && (
-          <Suspense fallback={<div />}>
-            <Timeline {...{setIsTimelineMode, setDate, dates}} />
-          </Suspense>
         )}
       </animated.div>
     </React.Fragment>

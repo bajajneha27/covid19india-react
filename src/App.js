@@ -95,7 +95,7 @@ function App() {
       </Suspense>
 
       <Suspense fallback={<div />}>
-        <Router>
+        <Router basename="/covid19india-react">
           <ScrollToTop />
           <Navbar
             pages={pages}

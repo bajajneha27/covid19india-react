@@ -49,9 +49,18 @@ export const TIMESERIES_CHART_TYPES = {
 };
 
 export const TIMESERIES_OPTIONS = {
-  BEGINNING: 'Beginning',
-  MONTH: '1 Month',
-  TWO_WEEKS: '2 Weeks',
+  TWO_WEEKS: {
+    label: '2 Weeks',
+    constraint: {weeks: 2},
+  },
+  MONTH: {
+    label: '1 Month',
+    constraint: {months: 1},
+  },
+  END: {
+    label: 'End',
+    constraint: {},
+  },
 };
 
 export const MAP_OPTIONS = {
@@ -78,7 +87,9 @@ export const ZONE_COLORS = {
 };
 
 export const MAPS_DIR =
-  process.env.NODE_ENV === 'production' ? '/mini_maps' : '/maps';
+  process.env.NODE_ENV === 'production'
+    ? `${process.env.PUBLIC_URL}/mini_maps`
+    : '/maps';
 
 export const MAP_META = {
   AP: {
