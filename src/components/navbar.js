@@ -74,9 +74,7 @@ function Navbar({
       </div>
 
       <div className="navbar-middle">
-        <a href="https://indiacovid.seva.ml">
-          seva.ml
-        </a>
+        <a href="https://indiacovid.seva.ml">seva.ml</a>
       </div>
 
       <div
@@ -101,12 +99,12 @@ function Navbar({
                 <Icon.Home {...activeNavIcon('/')} />
               </Link>
             </span>
-            {/* <span>
+            <span>
               <Link to="/demographics">
                 <Icon.Users {...activeNavIcon('/demographics')} />
               </Link>
             </span>
-            <span>
+            {/* <span>
               <Link to="/essentials">
                 <Icon.Package {...activeNavIcon('/essentials')} />
               </Link>
