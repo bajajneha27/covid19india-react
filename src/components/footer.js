@@ -15,7 +15,7 @@ function Footer(props) {
           target="_blank"
           rel="noopener noreferrer"
         >
-          BLOG HOME
+          blog
         </a>
       </div>
 
