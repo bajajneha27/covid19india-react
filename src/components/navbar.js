@@ -75,7 +75,7 @@ function Navbar({
 
       <div className="navbar-middle">
         <a href="https://indiacovid.seva.ml">
-          Blog <span>Home</span>
+          seva.ml
         </a>
       </div>
 
