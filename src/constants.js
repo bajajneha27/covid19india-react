@@ -23,7 +23,7 @@ export const BIG_TABLE_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
 
 export const MAP_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
 
-export const TIMESERIES_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
+export const TIMESERIES_STATISTICS = [...PRIMARY_STATISTICS];
 
 export const D3_TRANSITION_DURATION = 300;
 
