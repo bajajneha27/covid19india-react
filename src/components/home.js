@@ -4,6 +4,7 @@ import {fetcher} from '../utils/commonfunctions';
 
 import axios from 'axios';
 import {format} from 'date-fns';
+import merge from 'deepmerge';
 import React, {useState, useRef, lazy, Suspense, useEffect} from 'react';
 import {Helmet} from 'react-helmet';
 import {useIsVisible} from 'react-is-visible';
@@ -43,14 +44,27 @@ function Home(props) {
   const today = format(new Date(), 'yyyy-MM-dd');
   const [date, setDate] = useState(today);
   const [data, setData] = useState({});
+  const [timeseries, setTimeseries] = useState({});
 
-  const {data: timeseries} = useStickySWR(
+  const {data: futureTimeseries} = useStickySWR(
     'https://vics-core.github.io/covid-api/predictions.json',
     fetcher,
     {
       revalidateOnFocus: false,
     }
   );
+
+  const {data: pastTimeseries} = useStickySWR(
+    'https://api.covid19india.org/v3/min/timeseries.min.json',
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
+  );
+
+  useEffect(() => {
+    setTimeseries(merge(futureTimeseries || {}, pastTimeseries || {}));
+  }, [pastTimeseries, futureTimeseries]);
 
   useEffect(() => {
     let ret = {};
@@ -100,7 +114,7 @@ function Home(props) {
           <div className="header">
             <Suspense fallback={<div />}></Suspense>
 
-            {timeseries && (
+            {timeseries['TT'] && (
               <Suspense fallback={<div style={{minHeight: '56px'}} />}>
                 <Actions
                   {...{
@@ -120,7 +134,7 @@ function Home(props) {
           )}
 
           <Suspense fallback={<div />}>
-            {timeseries && (
+            {timeseries['TT'] && (
               <Minigraph timeseries={timeseries['TT']} {...{date}} />
             )}
           </Suspense>
