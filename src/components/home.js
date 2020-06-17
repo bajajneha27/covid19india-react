@@ -4,7 +4,8 @@ import {fetcher} from '../utils/commonfunctions';
 
 import 'intersection-observer';
 
-import React, {useState, useRef, lazy, Suspense, useEffect} from 'react';
+import {format} from 'date-fns';
+import React, {useState, useRef, lazy, Suspense} from 'react';
 import {Helmet} from 'react-helmet';
 import {useIsVisible} from 'react-is-visible';
 
@@ -38,8 +39,8 @@ function Home(props) {
 
   const [anchor, setAnchor] = useState(null);
   const [mapStatistic, setMapStatistic] = useState('active');
-  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
-  const [data, setData] = useState({});
+  const today = format(new Date(), 'yyyy-MM-dd');
+  const [date, setDate] = useState(today);
 
   const {data: timeseries} = useStickySWR(
     'https://vics-core.github.io/covid-api/predictions.json',
@@ -49,16 +50,17 @@ function Home(props) {
     }
   );
 
-  useEffect(()=>{
-    console.log("Setting data");
-    var ret = {};
-    for (var st in timeseries) {
-      ret[st] = timeseries[st][date];
+  const {data} = useStickySWR(
+    `https://api.covid19india.org/v3/min/data${
+      date < today ? `-${date}` : ''
+    }.min.json`,
+    fetcher,
+    {
+      revalidateOnMount: true,
+      refreshInterval: 100000,
+      revalidateOnFocus: false,
     }
-    setData(ret);
-    console.log(data);
-  }, [timeseries, date]);
-
+  );
 
   const homeRightElement = useRef();
   const isVisible = useIsVisible(homeRightElement, {once: true});
@@ -101,7 +103,7 @@ function Home(props) {
             )}
           </div>
 
-          {data['TT'] && (
+          {data && (
             <Suspense fallback={<div />}>
               <Level data={data['TT']} />
             </Suspense>
@@ -113,12 +115,11 @@ function Home(props) {
             )}
           </Suspense>
 
-          {data['TT'] && (
-            <Suspense fallback={<div />}>
+          <Suspense fallback={<div />}>
+            {data && (
               <Table {...{data, regionHighlighted, setRegionHighlighted}} />
-            </Suspense>
-          )}
-
+            )}
+          </Suspense>
         </div>
 
         <div className="home-right" ref={homeRightElement}>
