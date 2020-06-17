@@ -58,7 +58,7 @@ function App() {
       pageLink: '/demographics',
       view: Demographics,
       displayName: 'Demographics',
-      showInNavbar: false,
+      showInNavbar: true,
     },
     {
       pageLink: '/essentials',
