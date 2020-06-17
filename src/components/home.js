@@ -2,12 +2,13 @@ import {MAP_META} from '../constants';
 import useStickySWR from '../hooks/usestickyswr';
 import {fetcher} from '../utils/commonfunctions';
 
-import 'intersection-observer';
-
+import axios from 'axios';
 import {format} from 'date-fns';
-import React, {useState, useRef, lazy, Suspense} from 'react';
+import React, {useState, useRef, lazy, Suspense, useEffect} from 'react';
 import {Helmet} from 'react-helmet';
 import {useIsVisible} from 'react-is-visible';
+
+import 'intersection-observer';
 
 const TimeSeriesExplorer = lazy(() =>
   import('./timeseriesexplorer' /* webpackChunkName: "TimeSeriesExplorer" */)
@@ -41,6 +42,7 @@ function Home(props) {
   const [mapStatistic, setMapStatistic] = useState('active');
   const today = format(new Date(), 'yyyy-MM-dd');
   const [date, setDate] = useState(today);
+  const [data, setData] = useState({});
 
   const {data: timeseries} = useStickySWR(
     'https://vics-core.github.io/covid-api/predictions.json',
@@ -50,17 +52,25 @@ function Home(props) {
     }
   );
 
-  const {data} = useStickySWR(
-    `https://api.covid19india.org/v3/min/data${
-      date < today ? `-${date}` : ''
-    }.min.json`,
-    fetcher,
-    {
-      revalidateOnMount: true,
-      refreshInterval: 100000,
-      revalidateOnFocus: false,
+  useEffect(() => {
+    let ret = {};
+    if (date <= today) {
+      const d = date === today ? '' : `-${date}`;
+      axios
+        .get(`https://api.covid19india.org/v3/min/data${d}.min.json`)
+        .then((response) => {
+          ret = response.data;
+          setData(ret);
+        });
+      return;
     }
-  );
+    for (const st in timeseries) {
+      if (timeseries.hasOwnProperty(st)) {
+        ret[st] = timeseries[st][date];
+      }
+    }
+    setData(ret);
+  }, [date, timeseries, today]);
 
   const homeRightElement = useRef();
   const isVisible = useIsVisible(homeRightElement, {once: true});
@@ -103,7 +113,7 @@ function Home(props) {
             )}
           </div>
 
-          {data && (
+          {data['TT'] && (
             <Suspense fallback={<div />}>
               <Level data={data['TT']} />
             </Suspense>
@@ -116,7 +126,7 @@ function Home(props) {
           </Suspense>
 
           <Suspense fallback={<div />}>
-            {data && (
+            {data['TT'] && (
               <Table {...{data, regionHighlighted, setRegionHighlighted}} />
             )}
           </Suspense>
