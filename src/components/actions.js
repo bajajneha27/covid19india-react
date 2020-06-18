@@ -5,6 +5,7 @@ import React, {useMemo, useState, useEffect, lazy, Suspense} from 'react';
 import DatePicker from 'react-date-picker';
 import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
+import {FaHandPointLeft} from 'react-icons/fa';
 import {useSpring, animated, useTrail, config} from 'react-spring';
 import {useLocalStorage} from 'react-use';
 import useSWR from 'swr';
@@ -82,7 +83,7 @@ const ActionsPanel = ({
   const today = new Date();
   const [selectedDate, setSelectedDate] = useState(today);
   const minDate = new Date('26-MAR-2020');
-  const maxDate = new Date('31-DEC-2020');
+  const maxDate = new Date('30-DEC-2020');
   const {t} = useTranslation();
 
   // const Bell = useMemo(
@@ -140,7 +141,7 @@ const ActionsPanel = ({
             value={selectedDate}
             minDate={minDate}
             maxDate={maxDate}
-            calendarIcon={<Icon.Calendar />}
+            calendarIcon={<Icon.Calendar size={18} />}
             clearIcon={<Icon.XCircle />}
             format="dd/MM/y"
             onChange={(date) => {
@@ -156,6 +157,10 @@ const ActionsPanel = ({
             {newUpdate && <div className="indicator"></div>}
           </animated.div>
         )} */}
+
+        <animated.div>
+          <FaHandPointLeft size={24} color="#ec3333" />
+        </animated.div>
       </animated.div>
     </React.Fragment>
   );
