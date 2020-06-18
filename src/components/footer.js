@@ -7,7 +7,7 @@ function Footer(props) {
 
   return (
     <footer className="fadeInUp" style={{animationDelay: '2s'}}>
-      <h3>Proof of concept, based on covid19india.org</h3>
+      <h3>Proof of concept app based on covid19india.org</h3>
       <h5>{t('We stand with everyone fighting on the frontlines')}</h5>
 
       <div className="link">
