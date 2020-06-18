@@ -1,6 +1,4 @@
 import {MAP_META} from '../constants';
-import useStickySWR from '../hooks/usestickyswr';
-import {fetcher} from '../utils/commonfunctions';
 
 import axios from 'axios';
 import {format} from 'date-fns';
@@ -46,25 +44,19 @@ function Home(props) {
   const [data, setData] = useState({});
   const [timeseries, setTimeseries] = useState({});
 
-  const {data: futureTimeseries} = useStickySWR(
-    'https://vics-core.github.io/covid-api/predictions.json',
-    fetcher,
-    {
-      revalidateOnFocus: false,
-    }
-  );
-
-  const {data: pastTimeseries} = useStickySWR(
-    'https://api.covid19india.org/v3/min/timeseries.min.json',
-    fetcher,
-    {
-      revalidateOnFocus: false,
-    }
-  );
-
   useEffect(() => {
-    setTimeseries(merge(futureTimeseries || {}, pastTimeseries || {}));
-  }, [pastTimeseries, futureTimeseries]);
+    const pastTimeseries = axios.get(
+      'https://api.covid19india.org/v3/min/timeseries.min.json'
+    );
+    const futureTimeseries = axios.get(
+      'https://vics-core.github.io/covid-api/predictions.json'
+    );
+    axios.all([pastTimeseries, futureTimeseries]).then(
+      axios.spread((...responses) => {
+        setTimeseries(merge(responses[1].data, responses[0].data));
+      })
+    );
+  }, []);
 
   useEffect(() => {
     let ret = {};
@@ -161,7 +153,7 @@ function Home(props) {
                 </Suspense>
               )}
 
-              {timeseries && (
+              {timeseries['TT'] && (
                 <Suspense fallback={<div />}>
                   <TimeSeriesExplorer
                     timeseries={timeseries[regionHighlighted.stateCode]}

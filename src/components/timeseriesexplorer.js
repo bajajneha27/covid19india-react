@@ -67,7 +67,7 @@ function TimeSeriesExplorer({
       );
     }
 
-    return filteredDates;
+    return filteredDates.sort();
   }, [timeseries, timelineDate, timeseriesOption]);
 
   const handleChange = ({target}) => {
