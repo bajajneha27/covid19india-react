@@ -1,12 +1,13 @@
 import {MAP_META} from '../constants';
-import useStickySWR from '../hooks/usestickyswr';
-import {fetcher} from '../utils/commonfunctions';
 
-import 'intersection-observer';
-
+import axios from 'axios';
+import {format} from 'date-fns';
+import merge from 'deepmerge';
 import React, {useState, useRef, lazy, Suspense, useEffect} from 'react';
 import {Helmet} from 'react-helmet';
 import {useIsVisible} from 'react-is-visible';
+
+import 'intersection-observer';
 
 const TimeSeriesExplorer = lazy(() =>
   import('./timeseriesexplorer' /* webpackChunkName: "TimeSeriesExplorer" */)
@@ -38,27 +39,44 @@ function Home(props) {
 
   const [anchor, setAnchor] = useState(null);
   const [mapStatistic, setMapStatistic] = useState('active');
-  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+  const today = format(new Date(), 'yyyy-MM-dd');
+  const [date, setDate] = useState(today);
   const [data, setData] = useState({});
+  const [timeseries, setTimeseries] = useState({});
 
-  const {data: timeseries} = useStickySWR(
-    'https://vics-core.github.io/covid-api/predictions.json',
-    fetcher,
-    {
-      revalidateOnFocus: false,
+  useEffect(() => {
+    const pastTimeseries = axios.get(
+      'https://api.covid19india.org/v3/min/timeseries.min.json'
+    );
+    const futureTimeseries = axios.get(
+      'https://vics-core.github.io/covid-api/predictions.json'
+    );
+    axios.all([pastTimeseries, futureTimeseries]).then(
+      axios.spread((...responses) => {
+        setTimeseries(merge(responses[1].data, responses[0].data));
+      })
+    );
+  }, []);
+
+  useEffect(() => {
+    let ret = {};
+    if (date <= today) {
+      const d = date === today ? '' : `-${date}`;
+      axios
+        .get(`https://api.covid19india.org/v3/min/data${d}.min.json`)
+        .then((response) => {
+          ret = response.data;
+          setData(ret);
+        });
+      return;
     }
-  );
-
-  useEffect(()=>{
-    console.log("Setting data");
-    var ret = {};
-    for (var st in timeseries) {
-      ret[st] = timeseries[st][date];
+    for (const st in timeseries) {
+      if (timeseries.hasOwnProperty(st)) {
+        ret[st] = timeseries[st][date];
+      }
     }
     setData(ret);
-    console.log(data);
-  }, [timeseries, date]);
-
+  }, [date, timeseries, today]);
 
   const homeRightElement = useRef();
   const isVisible = useIsVisible(homeRightElement, {once: true});
@@ -88,7 +106,7 @@ function Home(props) {
           <div className="header">
             <Suspense fallback={<div />}></Suspense>
 
-            {timeseries && (
+            {timeseries['TT'] && (
               <Suspense fallback={<div style={{minHeight: '56px'}} />}>
                 <Actions
                   {...{
@@ -108,17 +126,16 @@ function Home(props) {
           )}
 
           <Suspense fallback={<div />}>
-            {timeseries && (
+            {timeseries['TT'] && (
               <Minigraph timeseries={timeseries['TT']} {...{date}} />
             )}
           </Suspense>
 
-          {data['TT'] && (
-            <Suspense fallback={<div />}>
+          <Suspense fallback={<div />}>
+            {data['TT'] && (
               <Table {...{data, regionHighlighted, setRegionHighlighted}} />
-            </Suspense>
-          )}
-
+            )}
+          </Suspense>
         </div>
 
         <div className="home-right" ref={homeRightElement}>
@@ -136,7 +153,7 @@ function Home(props) {
                 </Suspense>
               )}
 
-              {timeseries && (
+              {timeseries['TT'] && (
                 <Suspense fallback={<div />}>
                   <TimeSeriesExplorer
                     timeseries={timeseries[regionHighlighted.stateCode]}

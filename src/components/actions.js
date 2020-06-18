@@ -81,21 +81,21 @@ const ActionsPanel = ({
 }) => {
   const today = new Date();
   const [selectedDate, setSelectedDate] = useState(today);
-  const minDate = today;
+  const minDate = new Date('26-MAR-2020');
   const maxDate = new Date('31-DEC-2020');
   const {t} = useTranslation();
 
-  const Bell = useMemo(
-    () => (
-      <Icon.Bell
-        onClick={() => {
-          setShowUpdates(!showUpdates);
-          setNewUpdate(false);
-        }}
-      />
-    ),
-    [setNewUpdate, setShowUpdates, showUpdates]
-  );
+  // const Bell = useMemo(
+  //   () => (
+  //     <Icon.Bell
+  //       onClick={() => {
+  //         setShowUpdates(!showUpdates);
+  //         setNewUpdate(false);
+  //       }}
+  //     />
+  //   ),
+  //   [setNewUpdate, setShowUpdates, showUpdates]
+  // );
 
   const BellOff = useMemo(
     () => (
@@ -134,7 +134,7 @@ const ActionsPanel = ({
         }}
       >
         {showUpdates && BellOff}
-        <animated.h5 style={trail[0]}>{t('Select a future date')}:</animated.h5>
+        <animated.h5 style={trail[0]}>{t('Select a date')}:</animated.h5>
         <animated.div className="date-picker">
           <DatePicker
             value={selectedDate}

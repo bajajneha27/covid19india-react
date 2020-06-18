@@ -8,7 +8,6 @@ import produce from 'immer';
 import React, {useCallback, useRef, lazy} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useIsVisible} from 'react-is-visible';
-import {Link} from 'react-router-dom';
 import {useTrail, animated, config} from 'react-spring';
 import {createBreakpoint, useLocalStorage} from 'react-use';
 
@@ -164,7 +163,9 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
         {Object.keys(data)
           .filter(
             (stateCode) =>
-              stateCode !== 'TT' && data[stateCode].total?.confirmed
+              stateCode !== 'TT' &&
+              data[stateCode] &&
+              data[stateCode].total?.confirmed
           )
           .sort((a, b) => sortingFunction(a, b))
           .slice(0, isVisible ? Object.keys(data).length - 1 : 10)

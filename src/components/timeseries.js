@@ -315,6 +315,10 @@ function TimeSeries({
     });
   }, [highlightedDate]);
 
+  useEffect(() => {
+    setHighlightedDate(timelineDate);
+  }, [timelineDate]);
+
   const getStatisticDelta = useCallback(
     (statistic) => {
       if (!highlightedDate) return;
