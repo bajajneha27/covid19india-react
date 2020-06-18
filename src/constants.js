@@ -49,9 +49,9 @@ export const TIMESERIES_CHART_TYPES = {
 };
 
 export const TIMESERIES_OPTIONS = {
-  PAST_TWO_WEEKS: {
-    label: '2 Weeks',
-    constraint: {weeks: 2},
+  BEGINNING: {
+    label: 'Beginning',
+    constraint: {},
     past: true,
   },
   PAST_MONTH: {
@@ -59,9 +59,9 @@ export const TIMESERIES_OPTIONS = {
     constraint: {months: 1},
     past: true,
   },
-  BEGINNING: {
-    label: 'Beginning',
-    constraint: {},
+  PAST_TWO_WEEKS: {
+    label: '2 Weeks',
+    constraint: {weeks: 2},
     past: true,
   },
   END: {
