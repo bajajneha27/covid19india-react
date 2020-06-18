@@ -33,7 +33,7 @@ function Minigraph({timeseries, date: timelineDate}) {
       subDays(parseIndiaDate(today), MINIGRAPH_LOOKBACK_DAYS),
       {representation: 'date'}
     );
-    return pastDates.filter((date) => date >= cutOffDate);
+    return pastDates.filter((date) => date >= cutOffDate).sort();
   }, [timeseries, timelineDate]);
 
   useEffect(() => {
