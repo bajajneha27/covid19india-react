@@ -9,8 +9,12 @@ import {
   Route,
   Redirect,
   Switch,
+  useLocation
 } from 'react-router-dom';
 import useDarkMode from 'use-dark-mode';
+
+import ReactGA from 'react-ga';
+import ReactDOM from 'react-dom';
 
 const Home = lazy(() =>
   import('./components/home' /* webpackChunkName: "Home" */)
@@ -36,16 +40,23 @@ const LanguageSwitcher = lazy(() =>
 
 const schemaMarkup = {
   '@context': 'http://schema.org/',
-  '@type': 'NGO',
-  name: 'Coronavirus Outbreak in India: Latest Map and Case Count',
+  '@type': 'NonProfit',
+  name: 'Coronavirus Projections for India',
   alternateName: 'COVID-19 Tracker',
-  url: 'https://www.covid19india.org/',
+  url: 'https://seva.ml/',
   image: 'https://www.covid19india.org/thumbnail.png',
 };
+
+ReactGA.initialize('UA-165213678-1');
 
 function App() {
   const darkMode = useDarkMode(false);
   const [showLanguageSwitcher, setShowLanguageSwitcher] = useState(false);
+  let location = useLocation();
+  
+  React.useEffect(() => {
+    ReactGA.pageview(location.pathname + location.search);
+  }, [location]);
 
   const pages = [
     {
@@ -81,21 +92,7 @@ function App() {
   ];
 
   return (
-    <div className="App">
-      <Helmet>
-        <script type="application/ld+json">
-          {JSON.stringify(schemaMarkup)}
-        </script>
-      </Helmet>
-
       <Suspense fallback={<div />}>
-        <LanguageSwitcher
-          {...{showLanguageSwitcher, setShowLanguageSwitcher}}
-        />
-      </Suspense>
-
-      <Suspense fallback={<div />}>
-        <Router basename="/covid19india-react">
           <ScrollToTop />
           <Navbar
             pages={pages}
@@ -121,10 +118,29 @@ function App() {
               </React.Fragment>
             )}
           />
-        </Router>
       </Suspense>
-    </div>
   );
 }
+
+ReactDOM.render(
+  <div className="App">
+      <Helmet>
+        <script type="application/ld+json">
+          {JSON.stringify(schemaMarkup)}
+        </script>
+      </Helmet>
+
+      {/* <Suspense fallback={<div />}>
+        <LanguageSwitcher
+          {...{showLanguageSwitcher, setShowLanguageSwitcher}}
+        />
+      </Suspense> */}
+
+      <Router>
+        <App/>
+      </Router>
+    </div>,
+  document.getElementById('root')
+);
 
 export default App;
