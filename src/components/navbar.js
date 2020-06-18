@@ -74,7 +74,7 @@ function Navbar({
       </div>
 
       <div className="navbar-middle">
-        <a href="https://indiacovid.seva.ml">seva.ml</a>
+        <a href="https://indiacovid.seva.ml">seva.ml blog</a>
       </div>
 
       <div
@@ -104,7 +104,7 @@ function Navbar({
                 <Icon.Users {...activeNavIcon('/demographics')} />
               </Link>
             </span>
-            {/* <span>
+            <span>
               <Link to="/essentials">
                 <Icon.Package {...activeNavIcon('/essentials')} />
               </Link>
@@ -113,7 +113,12 @@ function Navbar({
               <Link to="/about">
                 <Icon.HelpCircle {...activeNavIcon('/about')} />
               </Link>
-            </span> */}
+            </span>
+            <span>
+              <Link to="/blog">
+                <Icon.Book {...activeNavIcon('/about')} />
+              </Link>
+            </span>
             <span>{windowSize.width > 768 && <SunMoon {...{darkMode}} />}</span>
           </React.Fragment>
         )}

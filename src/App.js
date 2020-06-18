@@ -1,5 +1,8 @@
 import './App.scss';
 import Navbar from './components/navbar';
+import About from './components/about';
+import Blog from './components/blog';
+
 import ScrollToTop from './utils/ScrollToTop';
 
 import React, {lazy, useState, Suspense} from 'react';
@@ -18,9 +21,6 @@ import ReactDOM from 'react-dom';
 
 const Home = lazy(() =>
   import('./components/home' /* webpackChunkName: "Home" */)
-);
-const FAQ = lazy(() =>
-  import('./components/faq' /* webpackChunkName: "About" */)
 );
 const Demographics = lazy(() =>
   import('./components/demographics' /* webpackChunkName: "Demographics" */)
@@ -75,13 +75,19 @@ function App() {
       pageLink: '/essentials',
       view: Essentials,
       displayName: 'Essentials',
-      showInNavbar: false,
+      showInNavbar: true,
     },
     {
       pageLink: '/about',
-      view: FAQ,
+      view: About,
       displayName: 'About',
-      showInNavbar: false,
+      showInNavbar: true,
+    },
+    {
+      pageLink: '/blog',
+      view: Blog,
+      displayName: 'Blog',
+      showInNavbar: true,
     },
     {
       pageLink: '/state/:stateCode',
