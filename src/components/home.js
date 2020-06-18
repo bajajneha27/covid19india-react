@@ -5,6 +5,7 @@ import {format} from 'date-fns';
 import merge from 'deepmerge';
 import React, {useState, useRef, lazy, Suspense, useEffect} from 'react';
 import {Helmet} from 'react-helmet';
+import {useTranslation} from 'react-i18next';
 import {useIsVisible} from 'react-is-visible';
 
 import 'intersection-observer';
@@ -43,6 +44,7 @@ function Home(props) {
   const [date, setDate] = useState(today);
   const [data, setData] = useState({});
   const [timeseries, setTimeseries] = useState({});
+  const {t} = useTranslation();
 
   useEffect(() => {
     const pastTimeseries = axios.get(
@@ -104,7 +106,11 @@ function Home(props) {
       <div className="Home">
         <div className="home-left">
           <div className="header">
-            <Suspense fallback={<div />}></Suspense>
+            <Suspense fallback={<div />}>
+              <div className="Search">
+                <label>{t('COVID-19 AI Predictions')}</label>
+              </div>
+            </Suspense>
 
             {timeseries['TT'] && (
               <Suspense fallback={<div style={{minHeight: '56px'}} />}>

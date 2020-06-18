@@ -1003,6 +1003,7 @@ h6 {
 .Search {
   display: flex;
   flex-direction: column;
+  font-weight: 800;
   margin-bottom: 1rem;
   position: relative;
   width: 100%;
@@ -1014,7 +1015,7 @@ h6 {
   label {
     color: $gray;
     font-family: 'archia';
-    font-size: 0.75rem;
+    font-size: 1.5rem;
     margin-bottom: 1rem;
   }
 
