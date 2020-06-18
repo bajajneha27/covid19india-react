@@ -52,9 +52,11 @@ function TimeSeriesExplorer({
           representation: 'date',
         }
       );
-      filteredDates = filteredDates.filter(
-        (date) => date >= cutOffDate && date <= today
-      );
+      filteredDates = filteredDates.filter((date) => date <= today);
+
+      if (cutOffDate != today) {
+        filteredDates = filteredDates.filter((date) => date >= cutOffDate);
+      }
     } else if (timeseriesOption.future) {
       cutOffDate = formatISO(
         add(parseIndiaDate(today), timeseriesOption.constraint),
@@ -62,9 +64,12 @@ function TimeSeriesExplorer({
           representation: 'date',
         }
       );
-      filteredDates = filteredDates.filter(
-        (date) => date <= cutOffDate && date >= today
-      );
+
+      filteredDates = filteredDates.filter((date) => date >= today);
+
+      if (cutOffDate != today) {
+        filteredDates = filteredDates.filter((date) => date <= cutOffDate);
+      }
     }
 
     return filteredDates.sort();
