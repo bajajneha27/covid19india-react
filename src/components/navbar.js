@@ -74,7 +74,7 @@ function Navbar({
       </div>
 
       <div className="navbar-middle">
-        <a href="https://indiacovid.seva.ml">seva.ml blog</a>
+        <a href="https://indiacovid.seva.ml">seva.ml&nbsp;&nbsp;&nbsp;&nbsp;</a>
       </div>
 
       <div
