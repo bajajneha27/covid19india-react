@@ -9,9 +9,9 @@ import {getIndiaTodayISO, parseIndiaDate} from '../utils/commonfunctions';
 
 import 'intersection-observer';
 
-import {PinIcon, IssueOpenedIcon} from '@primer/octicons-v2-react';
+import {PinIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
-import {formatISO, add} from 'date-fns';
+import {formatISO, add, sub} from 'date-fns';
 import equal from 'fast-deep-equal';
 import React, {useMemo, useRef, useState, lazy, Suspense} from 'react';
 import {useTranslation} from 'react-i18next';
@@ -33,7 +33,7 @@ function TimeSeriesExplorer({
 }) {
   const {t} = useTranslation();
   const [timeseriesOption, setTimeseriesOption] = useState(
-    TIMESERIES_OPTIONS.MONTH
+    TIMESERIES_OPTIONS.FUTURE_MONTH
   );
   const [chartType, setChartType] = useLocalStorage('chartType', 'total');
   const [isUniform, setIsUniform] = useLocalStorage('isUniform', true);
@@ -43,16 +43,31 @@ function TimeSeriesExplorer({
 
   const dates = useMemo(() => {
     const today = timelineDate || getIndiaTodayISO();
-    const cutOffDate = formatISO(
-      add(parseIndiaDate(today), timeseriesOption.constraint),
-      {
-        representation: 'date',
-      }
-    );
-    let pastDates = Object.keys(timeseries || {});
-    if (cutOffDate !== today)
-      pastDates = pastDates.filter((date) => date <= cutOffDate);
-    return pastDates;
+    let cutOffDate = today;
+    let filteredDates = Object.keys(timeseries || {});
+    if (timeseriesOption.past) {
+      cutOffDate = formatISO(
+        sub(parseIndiaDate(today), timeseriesOption.constraint),
+        {
+          representation: 'date',
+        }
+      );
+      filteredDates = filteredDates.filter(
+        (date) => date >= cutOffDate && date <= today
+      );
+    } else if (timeseriesOption.future) {
+      cutOffDate = formatISO(
+        add(parseIndiaDate(today), timeseriesOption.constraint),
+        {
+          representation: 'date',
+        }
+      );
+      filteredDates = filteredDates.filter(
+        (date) => date <= cutOffDate && date >= today
+      );
+    }
+
+    return filteredDates;
   }, [timeseries, timelineDate, timeseriesOption]);
 
   const handleChange = ({target}) => {
@@ -158,9 +173,9 @@ function TimeSeriesExplorer({
       )}
 
       <div className="pills">
-        {Object.values(TIMESERIES_OPTIONS).map((option) => (
+        {Object.values(TIMESERIES_OPTIONS).map((option, index) => (
           <button
-            key={option.label}
+            key={index}
             type="button"
             className={classnames({selected: timeseriesOption === option})}
             onClick={() => setTimeseriesOption(option)}
