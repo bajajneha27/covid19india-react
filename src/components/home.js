@@ -97,23 +97,13 @@ function Home(props) {
 
   useEffect(() => {
     let ret = {};
-    if (date < today) {
-      const d = date === today ? '' : `-${date}`;
-      axios
-        .get(`https://api.covid19india.org/v3/min/data${d}.min.json`)
-        .then((response) => {
-          ret = response.data;
-          setData(ret);
-        });
-      return;
-    }
     for (const st in timeseries) {
       if (timeseries.hasOwnProperty(st)) {
         ret[st] = timeseries[st][date];
       }
     }
     setData(ret);
-  }, [date, timeseries, today]);
+  }, [date, timeseries]);
 
   const homeRightElement = useRef();
   const isVisible = useIsVisible(homeRightElement, {once: true});
