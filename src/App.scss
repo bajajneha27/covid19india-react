@@ -3994,9 +3994,21 @@ footer {
 .pills {
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: space-between;
 
-  > button {
+  .past {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  .future {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+
+  button {
     background-color: $yellow-light;
     border: 2px $yellow-light solid;
     border-bottom: 0;
