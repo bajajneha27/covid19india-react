@@ -33,7 +33,7 @@ function TimeSeriesExplorer({
 }) {
   const {t} = useTranslation();
   const [timeseriesOption, setTimeseriesOption] = useState(
-    TIMESERIES_OPTIONS.FUTURE_MONTH
+    TIMESERIES_OPTIONS.future.FUTURE_MONTH
   );
   const [chartType, setChartType] = useLocalStorage('chartType', 'total');
   const [isUniform, setIsUniform] = useLocalStorage('isUniform', true);
@@ -178,15 +178,19 @@ function TimeSeriesExplorer({
       )}
 
       <div className="pills">
-        {Object.values(TIMESERIES_OPTIONS).map((option, index) => (
-          <button
-            key={index}
-            type="button"
-            className={classnames({selected: timeseriesOption === option})}
-            onClick={() => setTimeseriesOption(option)}
-          >
-            {t(option.label)}
-          </button>
+        {Object.keys(TIMESERIES_OPTIONS).map((date, index) => (
+          <div className={date} key={index}>
+            {Object.values(TIMESERIES_OPTIONS[date]).map((option, i) => (
+              <button
+                key={i}
+                type="button"
+                className={classnames({selected: timeseriesOption === option})}
+                onClick={() => setTimeseriesOption(option)}
+              >
+                {t(option.label)}
+              </button>
+            ))}
+          </div>
         ))}
       </div>
 
