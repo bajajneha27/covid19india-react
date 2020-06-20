@@ -2,7 +2,6 @@ import {MAP_META} from '../constants';
 
 import axios from 'axios';
 import {format} from 'date-fns';
-import merge from 'deepmerge';
 import React, {useState, useRef, lazy, Suspense, useEffect} from 'react';
 import {Helmet} from 'react-helmet';
 import {useTranslation} from 'react-i18next';
@@ -32,6 +31,38 @@ const Footer = lazy(() => import('./footer' /* webpackChunkName: "Footer" */));
 
 const Level = lazy(() => import('./level' /* webpackChunkName: "Level" */));
 
+function yesterday(dt) {
+  const dtObj = new Date(dt);
+  dtObj.setDate(dtObj.getDate() - 1);
+  return format(dtObj, 'yyyy-MM-dd');
+}
+
+function merge(past, future, today) {
+  const merged = {};
+  for (const st in past) {
+    merged[st] = {};
+    for (const dt in past[st]) {
+      if (dt === today) continue;
+      merged[st][dt] = {};
+      merged[st][dt]['delta'] = past[st][dt]['delta'];
+      merged[st][dt]['total'] = past[st][dt]['total'];
+    }
+  }
+  for (const st in future) {
+    for (const dt in future[st]) {
+      if (dt < today) continue;
+      merged[st][dt] = {};
+      const dt_minus_1 = yesterday(dt);
+      merged[st][dt]['delta'] = future[st][dt]['delta'];
+      merged[st][dt]['total'] = {};
+      for (const k in merged[st][dt]['delta']) {
+        merged[st][dt]['total'][k] = merged[st][dt_minus_1]['total'][k] + merged[st][dt]['delta'][k]
+      }
+    }
+  }
+  return merged;
+}
+
 function Home(props) {
   const [regionHighlighted, setRegionHighlighted] = useState({
     stateCode: 'TT',
@@ -57,12 +88,9 @@ function Home(props) {
       axios.spread((...responses) => {
         const pastTimeseriesData = responses[0].data;
         const futureTimeseriesData = responses[1].data;
-        for (const st in futureTimeseriesData) {
-          if (futureTimeseriesData.hasOwnProperty(st)) {
-            pastTimeseriesData[st][today] = futureTimeseriesData[st][today];
-          }
-        }
-        setTimeseries(merge(futureTimeseriesData, pastTimeseriesData));
+        
+        const mergedTimeseriesData = merge(pastTimeseriesData, futureTimeseriesData, today);
+        setTimeseries(mergedTimeseriesData);
       })
     );
   }, [today]);
