@@ -51,35 +51,35 @@ export const TIMESERIES_CHART_TYPES = {
 export const TIMESERIES_OPTIONS = {
   past: {
     BEGINNING: {
-      label: 'Beginning',
+      label: 'Bgn',
       constraint: {},
       past: true,
     },
     PAST_MONTH: {
-      label: '1 Month',
+      label: '< 1M',
       constraint: {months: 1},
       past: true,
     },
     PAST_TWO_WEEKS: {
-      label: '2 Weeks',
+      label: '< 2W',
       constraint: {weeks: 2},
       past: true,
     },
   },
   future: {
-    END: {
-      label: 'End',
-      constraint: {},
+    FUTURE_TWO_WEEKS: {
+      label: '2W >',
+      constraint: {weeks: 2},
       future: true,
     },
     FUTURE_MONTH: {
-      label: '1 Month',
+      label: '1M >',
       constraint: {months: 1},
       future: true,
     },
-    FUTURE_TWO_WEEKS: {
-      label: '2 Weeks',
-      constraint: {weeks: 2},
+    END: {
+      label: 'End',
+      constraint: {},
       future: true,
     },
   },
