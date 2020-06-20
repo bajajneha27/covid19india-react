@@ -55,14 +55,21 @@ function Home(props) {
     );
     axios.all([pastTimeseries, futureTimeseries]).then(
       axios.spread((...responses) => {
-        setTimeseries(merge(responses[1].data, responses[0].data));
+        const pastTimeseriesData = responses[0].data;
+        const futureTimeseriesData = responses[1].data;
+        for (const st in futureTimeseriesData) {
+          if (futureTimeseriesData.hasOwnProperty(st)) {
+            pastTimeseriesData[st] = futureTimeseriesData[st][today];
+          }
+        }
+        setTimeseries(merge(futureTimeseriesData, pastTimeseriesData));
       })
     );
-  }, []);
+  }, [today]);
 
   useEffect(() => {
     let ret = {};
-    if (date <= today) {
+    if (date < today) {
       const d = date === today ? '' : `-${date}`;
       axios
         .get(`https://api.covid19india.org/v3/min/data${d}.min.json`)
@@ -97,10 +104,7 @@ function Home(props) {
     <React.Fragment>
       <Helmet>
         <title>Coronavirus Projections for India - seva.ml</title>
-        <meta
-          name="title"
-          content="Coronavirus Projections for India"
-        />
+        <meta name="title" content="Coronavirus Projections for India" />
       </Helmet>
 
       <div className="Home">
