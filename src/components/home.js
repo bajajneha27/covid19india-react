@@ -59,7 +59,7 @@ function Home(props) {
         const futureTimeseriesData = responses[1].data;
         for (const st in futureTimeseriesData) {
           if (futureTimeseriesData.hasOwnProperty(st)) {
-            pastTimeseriesData[st] = futureTimeseriesData[st][today];
+            pastTimeseriesData[st][today] = futureTimeseriesData[st][today];
           }
         }
         setTimeseries(merge(futureTimeseriesData, pastTimeseriesData));
