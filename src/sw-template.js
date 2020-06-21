@@ -41,6 +41,7 @@ if (typeof importScripts === 'function') {
     // Adding networkFirst for all json data. In offline mode will be fetched from cache
     workbox.routing.registerRoute(
       new RegExp('https://api\\.covid19india\\.org/.*\\.json'),
+      new RegExp('https://vics-core\\.github\\.io/.*\\.json'),
       new workbox.strategies.NetworkFirst(),
       'GET'
     );
