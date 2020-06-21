@@ -2,7 +2,8 @@ import {MAP_META} from '../constants';
 
 import axios from 'axios';
 import {format} from 'date-fns';
-import React, {useState, useRef, lazy, Suspense, useEffect} from 'react';
+import merge from 'deepmerge';
+import React, {useState, useRef, lazy, Suspense, useMemo} from 'react';
 import {Helmet} from 'react-helmet';
 import {useTranslation} from 'react-i18next';
 import {useIsVisible} from 'react-is-visible';
@@ -77,7 +78,7 @@ function Home(props) {
   const [timeseries, setTimeseries] = useState({});
   const {t} = useTranslation();
 
-  useEffect(() => {
+  useMemo(() => {
     const pastTimeseries = axios.get(
       'https://api.covid19india.org/v3/min/timeseries.min.json'
     );
@@ -95,7 +96,7 @@ function Home(props) {
     );
   }, [today]);
 
-  useEffect(() => {
+  useMemo(() => {
     let ret = {};
     for (const st in timeseries) {
       if (timeseries.hasOwnProperty(st)) {
