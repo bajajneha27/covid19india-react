@@ -168,15 +168,6 @@ function TimeSeriesExplorer({
         )}
       </div>
 
-      {isVisible && (
-        <Suspense fallback={<TimeseriesLoader />}>
-          <TimeSeries
-            stateCode={regionHighlighted.stateCode}
-            {...{timeseries, dates, chartType, isUniform, isLog, timelineDate}}
-          />
-        </Suspense>
-      )}
-
       <div className="pills">
         {Object.keys(TIMESERIES_OPTIONS).map((date, index) => (
           <div className={date} key={index}>
@@ -193,6 +184,15 @@ function TimeSeriesExplorer({
           </div>
         ))}
       </div>
+
+      {isVisible && (
+        <Suspense fallback={<TimeseriesLoader />}>
+          <TimeSeries
+            stateCode={regionHighlighted.stateCode}
+            {...{timeseries, dates, chartType, isUniform, isLog, timelineDate}}
+          />
+        </Suspense>
+      )}
 
       {/* <div className="alert">
         <IssueOpenedIcon size={24} />
