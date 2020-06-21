@@ -2,7 +2,6 @@ import {MAP_META} from '../constants';
 
 import axios from 'axios';
 import {format} from 'date-fns';
-import merge from 'deepmerge';
 import React, {useState, useRef, lazy, Suspense, useMemo} from 'react';
 import {Helmet} from 'react-helmet';
 import {useTranslation} from 'react-i18next';
