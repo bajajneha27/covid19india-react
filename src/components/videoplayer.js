@@ -1,50 +1,51 @@
 import {keys, map} from 'lodash';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
-import plugin from "./motion.js";
+import plugin from './motion.js';
 import vp from '../vp.json';
 import {Helmet} from 'react-helmet';
 import Footer from './footer';
 import {format} from 'date-fns';
 import {formatNumber} from '../utils/commonfunctions';
-// import {MDCSlider} from '@material/slider';
 
 function VideoPlayer({}) {
-
-  const [highlightedDate, setHighlightedDate] = useState("2020-06-17");
+  const [highlightedDate, setHighlightedDate] = useState('2020-06-17');
 
   const chartOptions = {
     title: {
-      text: 'COVID-19 Predictions'
+      text: 'COVID-19 Predictions',
     },
     chart: {
-      type: 'spline'
+      type: 'spline',
     },
     series: [
       {
-        data: map(vp[highlightedDate].TT, (val, key) => {return {x: new Date(key), y: val.c}}),
+        data: map(vp[highlightedDate].TT, (val, key) => {
+          return {x: new Date(key), y: val.c};
+        }),
         fullData: vp,
-        name: "Confirmed Cases",
-        dataGrouping:{
+        name: 'Confirmed Cases',
+        dataGrouping: {
           forced: true,
-          units: [
-            [
-              'month', [1]
-            ]
-          ]
-        }
-      }
+          units: [['month', [1]]],
+        },
+      },
     ],
-    tooltip:{
+    tooltip: {
       formatter: function () {
-        return '<b>' + formatNumber(this.y) + '</b><br/>' + format(this.x, 'dd MMM, yyyy');
-      }
+        return (
+          '<b>' +
+          formatNumber(this.y) +
+          '</b><br/>' +
+          format(this.x, 'dd MMM, yyyy')
+        );
+      },
     },
-    credits:{
-      enabled: false
+    credits: {
+      enabled: false,
     },
-    xAxis:{
+    xAxis: {
       // labels:{
       //   formatter: function () {
       //     console.log("value", this.value)
@@ -52,24 +53,24 @@ function VideoPlayer({}) {
       //   }
       // },
       type: 'datetime',
-      tickInterval: 30 * 24 * 3600 * 1000
+      tickInterval: 30 * 24 * 3600 * 1000,
     },
     yAxis: {
       title: {
-        text: 'Number of cases'
-      }
+        text: 'Number of cases',
+      },
     },
     motion: {
       enabled: true,
-      axisLabel: "date",
+      axisLabel: 'date',
       labels: keys(vp),
       loop: false,
       updateInterval: 1000,
       magnet: {
-        round: "round",
-        step: 1
-      }
-    }
+        round: 'round',
+        step: 1,
+      },
+    },
   };
 
   const [options, setOptions] = useState(chartOptions);
@@ -88,8 +89,10 @@ function VideoPlayer({}) {
       <div className="header fadeInUp" style={{animationDelay: '0.3s'}}>
         <h1>Video Player</h1>
       </div>
-      <HighchartsReact options={options} highcharts={Highcharts} ></HighchartsReact>
-
+      <HighchartsReact
+        options={options}
+        highcharts={Highcharts}
+      ></HighchartsReact>
       <Footer />
     </div>
   );
