@@ -22,6 +22,10 @@ const TimeSeries = lazy(() =>
   import('./timeseries' /* webpackChunkName: "TimeSeries" */)
 );
 
+const VideoPlayer = lazy(() =>
+  import('./videoplayer')
+);
+
 function TimeSeriesExplorer({
   timeseries,
   date: timelineDate,
@@ -184,6 +188,10 @@ function TimeSeriesExplorer({
           </div>
         ))}
       </div>
+
+      <VideoPlayer
+        stateCode={regionHighlighted.stateCode}
+        {...{timeseries, dates, chartType, isUniform, isLog, timelineDate}}></VideoPlayer>
 
       {isVisible && (
         <Suspense fallback={<TimeseriesLoader />}>
