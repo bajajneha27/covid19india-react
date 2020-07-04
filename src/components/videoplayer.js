@@ -1,23 +1,14 @@
-import {keys, values} from 'lodash';
-// eslint-disable-next-line
-import * as Icon from 'react-feather';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {keys, map} from 'lodash';
+import React, {useState} from 'react';
 import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
-import {MDCSlider} from '@material/slider';
 import plugin from "./motion.js";
 import vp from '../vp.json';
 import {Helmet} from 'react-helmet';
 import Footer from './footer';
+// import {MDCSlider} from '@material/slider';
 
-function VideoPlayer({
-  timeseries,
-  dates,
-  chartType,
-  isUniform,
-  isLog,
-  timelineDate,
-}) {
+function VideoPlayer({}) {
 
   const [highlightedDate, setHighlightedDate] = useState("2020-06-17");
 
@@ -30,23 +21,31 @@ function VideoPlayer({
     },
     series: [
       {
-        data: values(vp[highlightedDate].TT).map((e) => e.c),
+        data: map(vp[highlightedDate].TT, (val, key) => {return {x: new Date(key), y: val.c}}),
         fullData: vp,
-        name: "Confirmed Cases"
+        name: "Confirmed Cases",
+        dataGrouping:{
+          forced: true,
+          units: [
+            [
+              'month', [1]
+            ]
+          ]
+        }
       }
     ],
     credits:{
       enabled: false
     },
     xAxis:{
-      labels:{
-        formatter: function () {
-          return Highcharts.dateFormat('%b', new Date(this.value));
-        }
-      },
+      // labels:{
+      //   formatter: function () {
+      //     console.log("value", this.value)
+      //     return Highcharts.dateFormat('%b', this.value);
+      //   }
+      // },
       type: 'datetime',
-      pointStart: Date.UTC(2020, 0, 1),
-      pointInterval: 12 * 30 * 24 * 3600 * 1000
+      tickInterval: 30 * 24 * 3600 * 1000
     },
     yAxis: {
       title: {
@@ -67,8 +66,6 @@ function VideoPlayer({
   };
 
   const [options, setOptions] = useState(chartOptions);
-  const min = useState(0);
-  const max = 8;
 
   return (
     <div className="VideoPlayer">

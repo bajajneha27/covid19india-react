@@ -5,7 +5,7 @@
  */
 
 import Highcharts from "highcharts/highstock";
-import {values} from 'lodash';
+import {map} from 'lodash';
 
 // JSLint options:
 /*global window*/
@@ -230,7 +230,6 @@ import {values} from 'lodash';
 
   // Updates chart data and redraws the chart
   Motion.prototype.updateChart = function(inputValue) {
-    console.log("this", this)
     var seriesKey,
       series,
       roundedInput = this.options.labels[this.round(inputValue)];
@@ -240,7 +239,9 @@ import {values} from 'lodash';
       for (seriesKey in this.dataSeries) {
         if (this.dataSeries.hasOwnProperty(seriesKey)) {
           series = this.dataSeries[seriesKey];
-          series.setData(values(series.options.fullData[roundedInput].TT).map((e) => e.c))
+          const data = map(series.options.fullData[roundedInput].TT, (val, key) => {return {x: new Date(key), y: val.c}})
+          series.setData(data)
+
         }
       }
       this.chart.redraw();
