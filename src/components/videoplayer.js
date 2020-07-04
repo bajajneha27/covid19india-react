@@ -6,6 +6,8 @@ import plugin from "./motion.js";
 import vp from '../vp.json';
 import {Helmet} from 'react-helmet';
 import Footer from './footer';
+import {format} from 'date-fns';
+import {formatNumber} from '../utils/commonfunctions';
 // import {MDCSlider} from '@material/slider';
 
 function VideoPlayer({}) {
@@ -34,6 +36,11 @@ function VideoPlayer({}) {
         }
       }
     ],
+    tooltip:{
+      formatter: function () {
+        return '<b>' + formatNumber(this.y) + '</b><br/>' + format(this.x, 'dd MMM, yyyy');
+      }
+    },
     credits:{
       enabled: false
     },
