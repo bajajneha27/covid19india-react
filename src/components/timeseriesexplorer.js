@@ -189,10 +189,6 @@ function TimeSeriesExplorer({
         ))}
       </div>
 
-      <VideoPlayer
-        stateCode={regionHighlighted.stateCode}
-        {...{timeseries, dates, chartType, isUniform, isLog, timelineDate}}></VideoPlayer>
-
       {isVisible && (
         <Suspense fallback={<TimeseriesLoader />}>
           <TimeSeries

@@ -7,6 +7,8 @@ import HighchartsReact from 'highcharts-react-official';
 import {MDCSlider} from '@material/slider';
 import plugin from "./motion.js";
 import vp from '../vp.json';
+import {Helmet} from 'react-helmet';
+import Footer from './footer';
 
 function VideoPlayer({
   timeseries,
@@ -69,11 +71,23 @@ function VideoPlayer({
   const max = 8;
 
   return (
-    <React.Fragment>
-      <div className="TimeSeries">
-        <HighchartsReact options={options} highcharts={Highcharts} ></HighchartsReact>
+    <div className="VideoPlayer">
+      <Helmet>
+        <title>Video Player - seva.ml</title>
+        <meta name="title" content={`Video Player - seva.ml`} />
+        <meta
+          name="description"
+          content="A video to demonstrate how the predictions are changing per day."
+        />
+      </Helmet>
+
+      <div className="header fadeInUp" style={{animationDelay: '0.3s'}}>
+        <h1>Video Player</h1>
       </div>
-    </React.Fragment>
+      <HighchartsReact options={options} highcharts={Highcharts} ></HighchartsReact>
+
+      <Footer />
+    </div>
   );
 }
 
