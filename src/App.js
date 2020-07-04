@@ -38,6 +38,10 @@ const LanguageSwitcher = lazy(() =>
   )
 );
 
+const VideoPlayer = lazy(() =>
+  import('./components/videoplayer') /* webpackChunkName: "VideoPlayer" */
+);
+
 const schemaMarkup = {
   '@context': 'http://schema.org/',
   '@type': 'NonProfit',
@@ -95,6 +99,12 @@ function App() {
       displayName: 'State',
       showInNavbar: false,
     },
+    {
+      pageLink: '/videoplayer',
+      view: VideoPlayer,
+      displayName: 'Video Player',
+      showInNavbar: false
+    }
   ];
 
   return (

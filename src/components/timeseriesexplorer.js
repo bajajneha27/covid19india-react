@@ -22,6 +22,10 @@ const TimeSeries = lazy(() =>
   import('./timeseries' /* webpackChunkName: "TimeSeries" */)
 );
 
+const VideoPlayer = lazy(() =>
+  import('./videoplayer')
+);
+
 function TimeSeriesExplorer({
   timeseries,
   date: timelineDate,
