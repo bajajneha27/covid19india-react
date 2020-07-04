@@ -12,7 +12,7 @@ import {
   Route,
   Redirect,
   Switch,
-  useLocation
+  useLocation,
 } from 'react-router-dom';
 import useDarkMode from 'use-dark-mode';
 
@@ -38,8 +38,8 @@ const LanguageSwitcher = lazy(() =>
   )
 );
 
-const VideoPlayer = lazy(() =>
-  import('./components/videoplayer') /* webpackChunkName: "VideoPlayer" */
+const VideoPlayer = lazy(
+  () => import('./components/videoplayer') /* webpackChunkName: "VideoPlayer" */
 );
 
 const schemaMarkup = {

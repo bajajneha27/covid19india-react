@@ -4,20 +4,21 @@
  * @version 1.0.9
  */
 
-import Highcharts from "highcharts/highstock";
+import Highcharts from 'highcharts/highstock';
 import {map} from 'lodash';
+import 'font-awesome/css/font-awesome.min.css';
 
 // JSLint options:
-/*global window*/
-(function(H) {
+/* global window*/
+(function (H) {
   // Check if object is array
   function isArray(obj) {
-    return Object.prototype.toString.call(obj) === "[object Array]";
+    return Object.prototype.toString.call(obj) === '[object Array]';
   }
 
   // Sets up motion ready to use
   function Motion(chart) {
-    var motion = this;
+    const motion = this;
 
     this.chart = chart;
     this.paused = true;
@@ -25,16 +26,16 @@ import {map} from 'lodash';
     this.dataSeries = [];
     this.dataLength = 0;
     motion.options.series = H.splat(motion.options.series);
-    Highcharts.each(this.chart.series, function(series, index) {
+    Highcharts.each(this.chart.series, function (series, index) {
       motion.dataSeries[index] = series;
-      motion.dataLength = motion.options.labels.length
+      motion.dataLength = motion.options.labels.length;
     });
 
     // Play-controls HTML-div
     this.playControls = H.createElement(
-      "div",
+      'div',
       {
-        id: "play-controls"
+        id: 'play-controls',
       },
       null,
       this.chart.renderTo,
@@ -43,27 +44,27 @@ import {map} from 'lodash';
 
     // Play/pause HTML-button
     this.playPauseBtn = H.createElement(
-      "button",
+      'button',
       {
-        id: "play-pause-button",
-        title: "play",
+        id: 'play-pause-button',
+        title: 'play',
       },
       null,
       this.playControls,
       null
     );
     this.playPauseBtn.className = this.options.playIcon;
-    this.playPauseBtn.value = "Play";
+    this.playPauseBtn.value = 'Play';
 
     // Play-range HTML-input
     this.playRange = H.createElement(
-      "input",
+      'input',
       {
-        id: "play-range",
-        type: "range",
+        id: 'play-range',
+        type: 'range',
         min: 0,
         max: this.dataLength - 1,
-        step: this.options.magnet.step
+        step: this.options.magnet.step,
       },
       null,
       this.playControls,
@@ -75,10 +76,10 @@ import {map} from 'lodash';
 
     // Play-range HTML-output
     this.playOutput = H.createElement(
-      "label",
+      'label',
       {
-        id: "play-output",
-        name: this.options.axisLabel
+        id: 'play-output',
+        name: this.options.axisLabel,
       },
       null,
       this.playControls,
@@ -86,7 +87,7 @@ import {map} from 'lodash';
     );
     if (isArray(this.options.labels)) {
       this.playOutput.innerHTML =
-        this.options.labels[this.dataLength - 1] || "";
+        this.options.labels[this.dataLength - 1] || '';
     } else {
       this.playOutput.innerHTML = this.dataLength - 1;
     }
@@ -117,23 +118,23 @@ import {map} from 'lodash';
     }
 
     // Bind controls to events
-    Highcharts.addEvent(this.playPauseBtn, "click", function() {
+    Highcharts.addEvent(this.playPauseBtn, 'click', function () {
       motion.togglePlayPause();
     });
-    Highcharts.addEvent(this.playRange, "mouseup", function() {
+    Highcharts.addEvent(this.playRange, 'mouseup', function () {
       motion.attractToStep();
     });
-    Highcharts.addEvent(this.playRange, "input", function() {
+    Highcharts.addEvent(this.playRange, 'input', function () {
       motion.updateChart(this.value);
     });
 
     // Request focus to the controls when clicking on controls div
-    Highcharts.addEvent(this.playControls, "click", function() {
+    Highcharts.addEvent(this.playControls, 'click', function () {
       motion.playRange.focus();
     });
     // Bind keys to events
-    Highcharts.addEvent(this.playPauseBtn, "keydown", handleKeyEvents);
-    Highcharts.addEvent(this.playRange, "keydown", handleKeyEvents);
+    Highcharts.addEvent(this.playPauseBtn, 'keydown', handleKeyEvents);
+    Highcharts.addEvent(this.playRange, 'keydown', handleKeyEvents);
 
     // Initial value
     this.inputValue = parseFloat(this.playRange.value);
@@ -150,68 +151,68 @@ import {map} from 'lodash';
   // Default options for Motion
   Motion.prototype.defaultOptions = {
     enabled: true,
-    axisLabel: "year",
+    axisLabel: 'year',
     autoPlay: false,
     loop: false,
     series: 0,
     updateInterval: 10,
     magnet: {
-      round: "round",
-      step: 0.01
+      round: 'round',
+      step: 0.01,
     },
-    playIcon: "fa fa-play",
-    pauseIcon: "fa fa-pause"
+    playIcon: 'fa fa-play',
+    pauseIcon: 'fa fa-pause',
   };
 
   // Toggles between Play and Pause states, and makes calls to changeButtonType()
   // From http://www.creativebloq.com/html5/build-custom-html5-video-player-9134473
-  Motion.prototype.togglePlayPause = function() {
-    this[this.paused ? "play" : "pause"]();
+  Motion.prototype.togglePlayPause = function () {
+    this[this.paused ? 'play' : 'pause']();
   };
 
   // Plays the motion, continuously updating the chart
-  Motion.prototype.play = function() {
-    var motion = this;
+  Motion.prototype.play = function () {
+    const motion = this;
     if (
       this.paused &&
       parseFloat(this.playRange.value) === parseFloat(this.playRange.max)
     ) {
       this.reset();
     }
-    this.changeButtonType("pause");
+    this.changeButtonType('pause');
     this.paused = false;
-    this.timer = setInterval(function() {
+    this.timer = setInterval(function () {
       motion.playUpdate();
     }, this.options.updateInterval);
   };
 
   // Pauses the motion, which stops updating the chart
-  Motion.prototype.pause = function() {
-    this.changeButtonType("play");
+  Motion.prototype.pause = function () {
+    this.changeButtonType('play');
     this.paused = true;
     window.clearInterval(this.timer);
     this.attractToStep();
   };
 
   // Resets the motion and updates the chart. Does not pause
-  Motion.prototype.reset = function() {
+  Motion.prototype.reset = function () {
     this.playRange.value = this.playRange.min;
     this.updateChart(this.playRange.value);
   };
 
   // Updates a button's title, innerHTML and CSS class to a certain value
-  Motion.prototype.changeButtonType = function(value) {
+  Motion.prototype.changeButtonType = function (value) {
     this.playPauseBtn.title = value;
-    this.playPauseBtn.className = value + " ";
-    if (value == "play") {
+    this.playPauseBtn.className = value + ' ';
+    if (value == 'play') {
       this.playPauseBtn.className += this.options.playIcon;
-    } else if (value == "pause") {
+    } else if (value == 'pause') {
       this.playPauseBtn.className += this.options.pauseIcon;
     }
   };
 
   // Called continuously while playing
-  Motion.prototype.playUpdate = function() {
+  Motion.prototype.playUpdate = function () {
     if (!this.paused) {
       this.inputValue = parseFloat(this.playRange.value);
       this.playRange.value = this.inputValue + this.options.magnet.step;
@@ -229,19 +230,23 @@ import {map} from 'lodash';
   };
 
   // Updates chart data and redraws the chart
-  Motion.prototype.updateChart = function(inputValue) {
-    var seriesKey,
-      series,
-      roundedInput = this.options.labels[this.round(inputValue)];
+  Motion.prototype.updateChart = function (inputValue) {
+    let seriesKey;
+    let series;
+    const roundedInput = this.options.labels[this.round(inputValue)];
     if (this.currentAxisValue !== roundedInput) {
       this.currentAxisValue = roundedInput;
       this.chart.options.motion.startIndex = roundedInput;
       for (seriesKey in this.dataSeries) {
         if (this.dataSeries.hasOwnProperty(seriesKey)) {
           series = this.dataSeries[seriesKey];
-          const data = map(series.options.fullData[roundedInput].TT, (val, key) => {return {x: new Date(key), y: val.c}})
-          series.setData(data)
-
+          const data = map(
+            series.options.fullData[roundedInput].TT,
+            (val, key) => {
+              return {x: new Date(key), y: val.c};
+            }
+          );
+          series.setData(data);
         }
       }
       this.chart.redraw();
@@ -250,10 +255,10 @@ import {map} from 'lodash';
   };
 
   // Moves output value to data point
-  Motion.prototype.attractToStep = function() {
+  Motion.prototype.attractToStep = function () {
     if (isArray(this.options.labels)) {
       this.playOutput.innerHTML =
-        this.options.labels[this.round(this.playRange.value)] || "";
+        this.options.labels[this.round(this.playRange.value)] || '';
     } else {
       this.playOutput.innerHTML = this.round(this.playRange.value);
     }
@@ -261,13 +266,13 @@ import {map} from 'lodash';
 
   // Returns an integer rounded up, down or even depending on
   // motion.magnet.round options.
-  Motion.prototype.round = function(number) {
+  Motion.prototype.round = function (number) {
     return Math[this.options.magnet.round](number);
   };
 
   // Initiates motion automatically if motion options object exists and
   // is not disabled
-  H.Chart.prototype.callbacks.push(function(chart) {
+  H.Chart.prototype.callbacks.push(function (chart) {
     if (chart.options.motion && chart.options.motion.enabled) {
       chart.motion = new Motion(chart);
     }
