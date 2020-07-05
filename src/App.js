@@ -103,8 +103,8 @@ function App() {
       pageLink: '/videoplayer',
       view: VideoPlayer,
       displayName: 'Video Player',
-      showInNavbar: false
-    }
+      showInNavbar: false,
+    },
   ];
 
   return (

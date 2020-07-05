@@ -8,7 +8,7 @@ import {
   MAP_VIEWS,
   STATE_NAMES,
   STATE_POPULATIONS_MIL,
-  UNKNOWN_DISTRICT_KEY,
+  // UNKNOWN_DISTRICT_KEY,
 } from '../constants';
 import {
   capitalize,

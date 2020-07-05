@@ -18,6 +18,7 @@ function VideoPlayer({}) {
     },
     chart: {
       type: 'spline',
+      height: 600
     },
     series: [
       {
@@ -59,6 +60,9 @@ function VideoPlayer({}) {
       title: {
         text: 'Number of cases',
       },
+      max: 175000,
+      min: 0,
+      tickAmount: 10
     },
     motion: {
       enabled: true,
