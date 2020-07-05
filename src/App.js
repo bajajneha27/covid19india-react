@@ -103,59 +103,57 @@ function App() {
       pageLink: '/videoplayer',
       view: VideoPlayer,
       displayName: 'Video Player',
-      showInNavbar: false
-    }
+      showInNavbar: false,
+    },
   ];
 
   return (
-      <Suspense fallback={<div />}>
-          <ScrollToTop />
-          <Navbar
-            pages={pages}
-            {...{darkMode}}
-            {...{showLanguageSwitcher, setShowLanguageSwitcher}}
-          />
-          <Route
-            render={({location}) => (
-              <React.Fragment>
-                <Switch location={location}>
-                  {pages.map((page, index) => {
-                    return (
-                      <Route
-                        exact
-                        path={page.pageLink}
-                        render={({match}) => <page.view />}
-                        key={index}
-                      />
-                    );
-                  })}
-                  <Redirect to="/" />
-                </Switch>
-              </React.Fragment>
-            )}
-          />
-      </Suspense>
+    <Suspense fallback={<div />}>
+      <ScrollToTop />
+      <Navbar
+        pages={pages}
+        {...{darkMode}}
+        {...{showLanguageSwitcher, setShowLanguageSwitcher}}
+      />
+      <Route
+        render={({location}) => (
+          <React.Fragment>
+            <Switch location={location}>
+              {pages.map((page, index) => {
+                return (
+                  <Route
+                    exact
+                    path={page.pageLink}
+                    render={({match}) => <page.view />}
+                    key={index}
+                  />
+                );
+              })}
+              <Redirect to="/" />
+            </Switch>
+          </React.Fragment>
+        )}
+      />
+    </Suspense>
   );
 }
 
 ReactDOM.render(
   <div className="App">
-      <Helmet>
-        <script type="application/ld+json">
-          {JSON.stringify(schemaMarkup)}
-        </script>
-      </Helmet>
+    <Helmet>
+      <script type="application/ld+json">{JSON.stringify(schemaMarkup)}</script>
+    </Helmet>
 
-      {/* <Suspense fallback={<div />}>
+    {/* <Suspense fallback={<div />}>
         <LanguageSwitcher
           {...{showLanguageSwitcher, setShowLanguageSwitcher}}
         />
       </Suspense> */}
 
-      <Router>
-        <App/>
-      </Router>
-    </div>,
+    <Router>
+      <App />
+    </Router>
+  </div>,
   document.getElementById('root')
 );
 

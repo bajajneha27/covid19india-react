@@ -4,6 +4,7 @@
  * @version 1.0.9
  */
 
+import {format} from 'date-fns';
 import Highcharts from 'highcharts/highstock';
 import {map} from 'lodash';
 import 'font-awesome/css/font-awesome.min.css';
@@ -25,6 +26,7 @@ import 'font-awesome/css/font-awesome.min.css';
     this.options = H.merge(this.defaultOptions, this.chart.options.motion);
     this.dataSeries = [];
     this.dataLength = 0;
+    this.options.startIndex = 0;
     motion.options.series = H.splat(motion.options.series);
     Highcharts.each(this.chart.series, function (series, index) {
       motion.dataSeries[index] = series;
@@ -85,12 +87,7 @@ import 'font-awesome/css/font-awesome.min.css';
       this.playControls,
       null
     );
-    if (isArray(this.options.labels)) {
-      this.playOutput.innerHTML =
-        this.options.labels[this.dataLength - 1] || '';
-    } else {
-      this.playOutput.innerHTML = this.dataLength - 1;
-    }
+    this.playOutput.innerHTML = format(new Date(this.options.labels[this.round(this.playRange.value)]),'dd MMM, yyyy')
 
     // Common key event handler function
     function handleKeyEvents(e) {
@@ -204,9 +201,9 @@ import 'font-awesome/css/font-awesome.min.css';
   Motion.prototype.changeButtonType = function (value) {
     this.playPauseBtn.title = value;
     this.playPauseBtn.className = value + ' ';
-    if (value == 'play') {
+    if (value === 'play') {
       this.playPauseBtn.className += this.options.playIcon;
-    } else if (value == 'pause') {
+    } else if (value === 'pause') {
       this.playPauseBtn.className += this.options.pauseIcon;
     }
   };
@@ -258,7 +255,7 @@ import 'font-awesome/css/font-awesome.min.css';
   Motion.prototype.attractToStep = function () {
     if (isArray(this.options.labels)) {
       this.playOutput.innerHTML =
-        this.options.labels[this.round(this.playRange.value)] || '';
+        format(new Date(this.options.labels[this.round(this.playRange.value)]),'dd MMM, yyyy') || '';
     } else {
       this.playOutput.innerHTML = this.round(this.playRange.value);
     }

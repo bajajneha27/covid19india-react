@@ -1,5 +1,5 @@
 import {keys, map} from 'lodash';
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
 import plugin from './motion.js';
@@ -18,6 +18,7 @@ function VideoPlayer({}) {
     },
     chart: {
       type: 'spline',
+      height: 600
     },
     series: [
       {
@@ -54,11 +55,15 @@ function VideoPlayer({}) {
       // },
       type: 'datetime',
       tickInterval: 30 * 24 * 3600 * 1000,
+      range: 12 * 30 * 24 * 3600 * 1000
     },
     yAxis: {
       title: {
-        text: 'Number of cases',
+        text: 'Daily Reported Cases',
       },
+      max: 175000,
+      min: 0,
+      tickAmount: 10
     },
     motion: {
       enabled: true,
