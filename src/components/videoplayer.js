@@ -55,6 +55,7 @@ function VideoPlayer({}) {
       // },
       type: 'datetime',
       tickInterval: 30 * 24 * 3600 * 1000,
+      range: 12 * 30 * 24 * 3600 * 1000
     },
     yAxis: {
       title: {

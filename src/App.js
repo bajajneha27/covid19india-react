@@ -140,11 +140,9 @@ function App() {
 
 ReactDOM.render(
   <div className="App">
-      <Helmet>
-        <script type="application/ld+json">
-          {JSON.stringify(schemaMarkup)}
-        </script>
-      </Helmet>
+    <Helmet>
+      <script type="application/ld+json">{JSON.stringify(schemaMarkup)}</script>
+    </Helmet>
 
       {/* <Suspense fallback={<div />}>
         <LanguageSwitcher
