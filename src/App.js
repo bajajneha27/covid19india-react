@@ -108,33 +108,33 @@ function App() {
   ];
 
   return (
-      <Suspense fallback={<div />}>
-          <ScrollToTop />
-          <Navbar
-            pages={pages}
-            {...{darkMode}}
-            {...{showLanguageSwitcher, setShowLanguageSwitcher}}
-          />
-          <Route
-            render={({location}) => (
-              <React.Fragment>
-                <Switch location={location}>
-                  {pages.map((page, index) => {
-                    return (
-                      <Route
-                        exact
-                        path={page.pageLink}
-                        render={({match}) => <page.view />}
-                        key={index}
-                      />
-                    );
-                  })}
-                  <Redirect to="/" />
-                </Switch>
-              </React.Fragment>
-            )}
-          />
-      </Suspense>
+    <Suspense fallback={<div />}>
+      <ScrollToTop />
+      <Navbar
+        pages={pages}
+        {...{darkMode}}
+        {...{showLanguageSwitcher, setShowLanguageSwitcher}}
+      />
+      <Route
+        render={({location}) => (
+          <React.Fragment>
+            <Switch location={location}>
+              {pages.map((page, index) => {
+                return (
+                  <Route
+                    exact
+                    path={page.pageLink}
+                    render={({match}) => <page.view />}
+                    key={index}
+                  />
+                );
+              })}
+              <Redirect to="/" />
+            </Switch>
+          </React.Fragment>
+        )}
+      />
+    </Suspense>
   );
 }
 

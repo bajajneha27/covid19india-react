@@ -3397,6 +3397,32 @@ footer {
   }
 }
 
+.VideoPlayer {
+  margin-left: 6.5rem;
+  margin-right: 5rem;
+}
+
+div#play-controls {
+  margin-left: 2rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-right: 2rem;
+  align-items: center
+
+  button#play-pause-button {
+    width: 3%;
+    height: 35px;
+    cursor: pointer;
+  }
+
+  input#play-range {
+    width: 90%;
+    cursor: pointer;
+  }
+}
+
 .Patients {
   align-self: center;
   display: flex;
@@ -4932,6 +4958,15 @@ footer {
   .LanguageSwitcher {
     margin-left: 0;
   }
+
+  .VideoPlayer {
+    margin-left: unset;
+    margin-right: 1rem;
+
+    input#play-range {
+      width: 63% !important;
+    }
+  }
 }
 
 // Dark Mode
@@ -5313,31 +5348,5 @@ footer {
   100% {
     opacity: 0;
     transform: translateY(20px);
-  }
-}
-
-.VideoPlayer {
-  margin-left: 6.5rem;
-  margin-right: 5rem;
-}
-
-div#play-controls {
-  margin-left: 2rem;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  margin-right: 2rem;
-  align-items: center
-
-  button#play-pause-button {
-    width: 3%;
-    height: 35px;
-    cursor: pointer;
-  }
-
-  input#play-range {
-    width: 90%;
-    cursor: pointer;
   }
 }

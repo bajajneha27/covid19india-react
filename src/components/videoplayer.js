@@ -1,5 +1,5 @@
 import {keys, map} from 'lodash';
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
 import plugin from './motion.js';
@@ -58,7 +58,7 @@ function VideoPlayer({}) {
     },
     yAxis: {
       title: {
-        text: 'Number of cases',
+        text: 'Daily Reported Cases',
       },
       max: 175000,
       min: 0,
