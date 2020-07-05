@@ -201,9 +201,9 @@ import 'font-awesome/css/font-awesome.min.css';
   Motion.prototype.changeButtonType = function (value) {
     this.playPauseBtn.title = value;
     this.playPauseBtn.className = value + ' ';
-    if (value == 'play') {
+    if (value === 'play') {
       this.playPauseBtn.className += this.options.playIcon;
-    } else if (value == 'pause') {
+    } else if (value === 'pause') {
       this.playPauseBtn.className += this.options.pauseIcon;
     }
   };

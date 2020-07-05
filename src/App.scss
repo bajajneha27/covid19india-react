@@ -3412,27 +3412,21 @@ footer {
       margin-right: 2rem;
       align-items: center
 
-      button {
-        #play-pause-button {
-          width: 3%;
-          height: 35px;
-          cursor: pointer;
-        }
+      button#play-pause-button {
+        width: 3%;
+        height: 35px;
+        cursor: pointer;
       }
 
-      input {
-        #play-range {
-          width: 90%;
-          cursor: pointer;
-        }
+      input#play-range {
+        width: 90%;
+        cursor: pointer;
       }
 
-      label {
-        #play-output {
-          font-family: 'Lucida Grande';
-          color: $gray;
-          font-size: small;
-        }
+      label#play-output {
+        font-family: 'Lucida Grande';
+        color: $gray;
+        font-size: small;
       }
     }
   }
@@ -4978,10 +4972,8 @@ footer {
     margin-left: unset;
     margin-right: 1rem;
 
-    input {
-      #play-range {
-        width: 60% !important;
-      }
+    input#play-range {
+      width: 60% !important;
     }
   }
 }
