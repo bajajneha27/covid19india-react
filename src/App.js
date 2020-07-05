@@ -150,10 +150,10 @@ ReactDOM.render(
         />
       </Suspense> */}
 
-      <Router>
-        <App/>
-      </Router>
-    </div>,
+    <Router>
+      <App />
+    </Router>
+  </div>,
   document.getElementById('root')
 );
 

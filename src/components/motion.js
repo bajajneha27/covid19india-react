@@ -4,6 +4,7 @@
  * @version 1.0.9
  */
 
+import {format} from 'date-fns';
 import Highcharts from 'highcharts/highstock';
 import {map} from 'lodash';
 import 'font-awesome/css/font-awesome.min.css';
@@ -86,7 +87,7 @@ import 'font-awesome/css/font-awesome.min.css';
       this.playControls,
       null
     );
-    this.playOutput.innerHTML = this.playRange.value
+    this.playOutput.innerHTML = format(new Date(this.options.labels[this.round(this.playRange.value)]),'dd MMM, yyyy')
 
     // Common key event handler function
     function handleKeyEvents(e) {
@@ -254,7 +255,7 @@ import 'font-awesome/css/font-awesome.min.css';
   Motion.prototype.attractToStep = function () {
     if (isArray(this.options.labels)) {
       this.playOutput.innerHTML =
-        this.options.labels[this.round(this.playRange.value)] || '';
+        format(new Date(this.options.labels[this.round(this.playRange.value)]),'dd MMM, yyyy') || '';
     } else {
       this.playOutput.innerHTML = this.round(this.playRange.value);
     }
