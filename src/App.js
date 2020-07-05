@@ -144,7 +144,7 @@ ReactDOM.render(
       <script type="application/ld+json">{JSON.stringify(schemaMarkup)}</script>
     </Helmet>
 
-      {/* <Suspense fallback={<div />}>
+    {/* <Suspense fallback={<div />}>
         <LanguageSwitcher
           {...{showLanguageSwitcher, setShowLanguageSwitcher}}
         />

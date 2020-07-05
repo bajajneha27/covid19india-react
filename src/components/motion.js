@@ -25,6 +25,7 @@ import 'font-awesome/css/font-awesome.min.css';
     this.options = H.merge(this.defaultOptions, this.chart.options.motion);
     this.dataSeries = [];
     this.dataLength = 0;
+    this.options.startIndex = 0;
     motion.options.series = H.splat(motion.options.series);
     Highcharts.each(this.chart.series, function (series, index) {
       motion.dataSeries[index] = series;
@@ -85,12 +86,7 @@ import 'font-awesome/css/font-awesome.min.css';
       this.playControls,
       null
     );
-    if (isArray(this.options.labels)) {
-      this.playOutput.innerHTML =
-        this.options.labels[this.dataLength - 1] || '';
-    } else {
-      this.playOutput.innerHTML = this.dataLength - 1;
-    }
+    this.playOutput.innerHTML = this.playRange.value
 
     // Common key event handler function
     function handleKeyEvents(e) {
