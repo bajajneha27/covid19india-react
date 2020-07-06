@@ -31,6 +31,7 @@ function VideoPlayer({}) {
           forced: true,
           units: [['month', [1]]],
         },
+        color: 'orange'
       },
     ],
     tooltip: {

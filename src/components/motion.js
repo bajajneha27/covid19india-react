@@ -87,7 +87,10 @@ import 'font-awesome/css/font-awesome.min.css';
       this.playControls,
       null
     );
-    this.playOutput.innerHTML = format(new Date(this.options.labels[this.round(this.playRange.value)]),'dd MMM, yyyy')
+    this.playOutput.innerHTML = format(
+      new Date(this.options.labels[this.round(this.playRange.value)]),
+      'dd MMM, yyyy'
+    );
 
     // Common key event handler function
     function handleKeyEvents(e) {
@@ -230,7 +233,9 @@ import 'font-awesome/css/font-awesome.min.css';
   Motion.prototype.updateChart = function (inputValue) {
     let seriesKey;
     let series;
+    const today = new Date('2020-06-26');
     const roundedInput = this.options.labels[this.round(inputValue)];
+    const selectedDate = new Date(roundedInput);
     if (this.currentAxisValue !== roundedInput) {
       this.currentAxisValue = roundedInput;
       this.chart.options.motion.startIndex = roundedInput;
@@ -243,6 +248,13 @@ import 'font-awesome/css/font-awesome.min.css';
               return {x: new Date(key), y: val.c};
             }
           );
+          if (selectedDate > today) {
+            series.color = '#7cb5ec';
+            series.setName('Predicted Cases');
+          } else {
+            series.color = 'orange';
+            series.setName('Confirmed Cases');
+          }
           series.setData(data);
         }
       }
@@ -255,7 +267,10 @@ import 'font-awesome/css/font-awesome.min.css';
   Motion.prototype.attractToStep = function () {
     if (isArray(this.options.labels)) {
       this.playOutput.innerHTML =
-        format(new Date(this.options.labels[this.round(this.playRange.value)]),'dd MMM, yyyy') || '';
+        format(
+          new Date(this.options.labels[this.round(this.playRange.value)]),
+          'dd MMM, yyyy'
+        ) || '';
     } else {
       this.playOutput.innerHTML = this.round(this.playRange.value);
     }
