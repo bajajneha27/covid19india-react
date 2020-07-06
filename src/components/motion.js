@@ -230,7 +230,9 @@ import 'font-awesome/css/font-awesome.min.css';
   Motion.prototype.updateChart = function (inputValue) {
     let seriesKey;
     let series;
+    const today = new Date('2020-06-26');
     const roundedInput = this.options.labels[this.round(inputValue)];
+    const selectedDate = new Date(roundedInput);
     if (this.currentAxisValue !== roundedInput) {
       this.currentAxisValue = roundedInput;
       this.chart.options.motion.startIndex = roundedInput;
@@ -243,6 +245,14 @@ import 'font-awesome/css/font-awesome.min.css';
               return {x: new Date(key), y: val.c};
             }
           );
+          if(selectedDate > today){
+            series.color = '#7cb5ec'
+            series.name = 'Confirmed Cases'
+          }
+          else{
+            series.color = 'orange'
+            series.name = 'Predicted Cases'
+          }
           series.setData(data);
         }
       }
