@@ -6,7 +6,7 @@
 
 import {format} from 'date-fns';
 import Highcharts from 'highcharts/highstock';
-import {map} from 'lodash';
+import {transform} from 'lodash';
 import 'font-awesome/css/font-awesome.min.css';
 
 // JSLint options:
@@ -233,27 +233,25 @@ import 'font-awesome/css/font-awesome.min.css';
   Motion.prototype.updateChart = function (inputValue) {
     let seriesKey;
     let series;
-    const today = new Date('2020-06-26');
+    let data;
     const roundedInput = this.options.labels[this.round(inputValue)];
-    const selectedDate = new Date(roundedInput);
+    const today = format(new Date(), 'yyyy-MM-dd');
     if (this.currentAxisValue !== roundedInput) {
       this.currentAxisValue = roundedInput;
       this.chart.options.motion.startIndex = roundedInput;
       for (seriesKey in this.dataSeries) {
         if (this.dataSeries.hasOwnProperty(seriesKey)) {
           series = this.dataSeries[seriesKey];
-          const data = map(
-            series.options.fullData[roundedInput].TT,
-            (val, key) => {
-              return {x: new Date(key), y: val.c};
-            }
-          );
-          if (selectedDate > today) {
-            series.color = '#7cb5ec';
-            series.setName('Predicted Cases');
-          } else {
-            series.color = 'orange';
-            series.setName('Confirmed Cases');
+          const fullData = series.options.fullData[roundedInput].TT;
+          if(seriesKey === '0'){
+            data = transform(fullData, function(res, v, k) {
+              if(k<=today){res.push({x: new Date(k), y: v.c})};
+            }, [])
+          }
+          else if(seriesKey === '1'){
+            data = transform(fullData, function(res, v, k) {
+              if(k>=today){res.push({x: new Date(k), y: v.c})};
+            }, [])
           }
           series.setData(data);
         }

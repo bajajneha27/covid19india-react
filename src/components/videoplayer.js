@@ -1,4 +1,4 @@
-import {keys, map} from 'lodash';
+import {keys, transform} from 'lodash';
 import React, {useState} from 'react';
 import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
@@ -11,6 +11,7 @@ import {formatNumber} from '../utils/commonfunctions';
 
 function VideoPlayer({}) {
   const [highlightedDate, setHighlightedDate] = useState('2020-06-17');
+  const today = format(new Date(), 'yyyy-MM-dd')
 
   const chartOptions = {
     title: {
@@ -18,22 +19,42 @@ function VideoPlayer({}) {
     },
     chart: {
       type: 'spline',
-      height: 600
+      height: 600,
     },
     series: [
       {
-        data: map(vp[highlightedDate].TT, (val, key) => {
-          return {x: new Date(key), y: val.c};
-        }),
+        data: transform(vp[highlightedDate].TT, function(res, v, k) {
+          if(k<=today){res.push({x: new Date(k), y: v.c})};
+        }, []),
         fullData: vp,
         name: 'Confirmed Cases',
         dataGrouping: {
           forced: true,
           units: [['month', [1]]],
         },
-        color: 'orange'
+        color: 'orange',
       },
+      {
+        data: transform(vp[highlightedDate].TT, function(res, v, k) {
+          if(k>=today){res.push({x: new Date(k), y: v.c})};
+        }, []),
+        fullData: vp,
+        name: 'Predicted Cases',
+        dataGrouping: {
+          forced: true,
+          units: [['month', [1]]]
+        },
+        color: '#7cb5ec'
+      }
     ],
+    legend:{
+      align: 'right',
+      verticalAlign: 'top',
+      layout: 'vertical',
+      x: -10,
+      y: 50,
+      floating: true
+    },
     tooltip: {
       formatter: function () {
         return (
@@ -56,7 +77,7 @@ function VideoPlayer({}) {
       // },
       type: 'datetime',
       tickInterval: 30 * 24 * 3600 * 1000,
-      range: 12 * 30 * 24 * 3600 * 1000
+      range: 12 * 30 * 24 * 3600 * 1000,
     },
     yAxis: {
       title: {
@@ -64,7 +85,7 @@ function VideoPlayer({}) {
       },
       max: 175000,
       min: 0,
-      tickAmount: 10
+      tickAmount: 10,
     },
     motion: {
       enabled: true,
