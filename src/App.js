@@ -57,7 +57,7 @@ function App() {
   const darkMode = useDarkMode(false);
   const [showLanguageSwitcher, setShowLanguageSwitcher] = useState(false);
   let location = useLocation();
-  
+
   React.useEffect(() => {
     ReactGA.pageview(location.pathname + location.search);
   }, [location]);
