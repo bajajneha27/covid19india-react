@@ -6,7 +6,7 @@
 
 import {format} from 'date-fns';
 import Highcharts from 'highcharts/highstock';
-import {transform} from 'lodash';
+import {transform, isEmpty} from 'lodash';
 import 'font-awesome/css/font-awesome.min.css';
 
 // JSLint options:
@@ -28,9 +28,9 @@ import 'font-awesome/css/font-awesome.min.css';
     this.dataLength = 0;
     this.options.startIndex = 0;
     motion.options.series = H.splat(motion.options.series);
+    motion.dataLength = motion.options.labels.length;
     Highcharts.each(this.chart.series, function (series, index) {
       motion.dataSeries[index] = series;
-      motion.dataLength = motion.options.labels.length;
     });
 
     // Play-controls HTML-div
@@ -242,16 +242,13 @@ import 'font-awesome/css/font-awesome.min.css';
       for (seriesKey in this.dataSeries) {
         if (this.dataSeries.hasOwnProperty(seriesKey)) {
           series = this.dataSeries[seriesKey];
+          if (isEmpty(series.options.fullData)) return;
           const fullData = series.options.fullData[roundedInput].TT;
           if(seriesKey === '0'){
-            data = transform(fullData, function(res, v, k) {
-              if(k<=today){res.push({x: new Date(k), y: v.c})};
-            }, [])
+            data = updateConfirmedCases(fullData, today);
           }
           else if(seriesKey === '1'){
-            data = transform(fullData, function(res, v, k) {
-              if(k>=today){res.push({x: new Date(k), y: v.c})};
-            }, [])
+            data = updatePredictedCases(fullData, today);
           }
           series.setData(data);
         }
@@ -260,6 +257,18 @@ import 'font-awesome/css/font-awesome.min.css';
       this.attractToStep();
     }
   };
+
+  function updateConfirmedCases(fullData, today){
+    return transform(fullData, function(res, v, k) {
+      if(k<=today){res.push({x: new Date(k), y: v.c})};
+    }, [])    
+  }
+
+  function updatePredictedCases(fullData, today){
+    return transform(fullData, function(res, v, k) {
+      if(k>=today){res.push({x: new Date(k), y: v.c})};
+    }, []);
+  }
 
   // Moves output value to data point
   Motion.prototype.attractToStep = function () {

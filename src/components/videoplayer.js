@@ -1,17 +1,17 @@
-import {keys, transform} from 'lodash';
-import React, {useState} from 'react';
+import {keys, transform, isEmpty} from 'lodash';
+import React, {useState, useEffect} from 'react';
 import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
 import plugin from './motion.js';
-import vp from '../vp.json';
 import {Helmet} from 'react-helmet';
 import Footer from './footer';
 import {format} from 'date-fns';
 import {formatNumber} from '../utils/commonfunctions';
+import axios from 'axios';
 
 function VideoPlayer({}) {
-  const [highlightedDate, setHighlightedDate] = useState('2020-06-17');
   const today = format(new Date(), 'yyyy-MM-dd')
+  const [options, setOptions] = useState({});
 
   const chartOptions = {
     title: {
@@ -19,14 +19,10 @@ function VideoPlayer({}) {
     },
     chart: {
       type: 'spline',
-      height: 600,
+      height: 600
     },
     series: [
       {
-        data: transform(vp[highlightedDate].TT, function(res, v, k) {
-          if(k<=today){res.push({x: new Date(k), y: v.c})};
-        }, []),
-        fullData: vp,
         name: 'Confirmed Cases',
         dataGrouping: {
           forced: true,
@@ -35,10 +31,6 @@ function VideoPlayer({}) {
         color: 'orange',
       },
       {
-        data: transform(vp[highlightedDate].TT, function(res, v, k) {
-          if(k>=today){res.push({x: new Date(k), y: v.c})};
-        }, []),
-        fullData: vp,
         name: 'Predicted Cases',
         dataGrouping: {
           forced: true,
@@ -69,12 +61,6 @@ function VideoPlayer({}) {
       enabled: false,
     },
     xAxis: {
-      // labels:{
-      //   formatter: function () {
-      //     console.log("value", this.value)
-      //     return Highcharts.dateFormat('%b', this.value);
-      //   }
-      // },
       type: 'datetime',
       tickInterval: 30 * 24 * 3600 * 1000,
       range: 12 * 30 * 24 * 3600 * 1000,
@@ -90,7 +76,6 @@ function VideoPlayer({}) {
     motion: {
       enabled: true,
       axisLabel: 'date',
-      labels: keys(vp),
       loop: false,
       updateInterval: 1000,
       magnet: {
@@ -100,7 +85,23 @@ function VideoPlayer({}) {
     },
   };
 
-  const [options, setOptions] = useState(chartOptions);
+  useEffect(() => {
+    axios.get('https://vics-core.github.io/covid-api/vp/1.1740.json')
+      .then(res => {
+        const data = res.data;
+        chartOptions.series[0].fullData = data;
+        chartOptions.series[1].fullData = data;
+        chartOptions.motion.labels = keys(data);
+        const highlightedDate = chartOptions.motion.labels[0]
+        chartOptions.series[0].data = (transform(res.data[highlightedDate].TT, function(res, v, k) {
+          if(k<=today){res.push({x: new Date(k), y: v.c})};
+        }, []));
+        chartOptions.series[1].data = (transform(res.data[highlightedDate].TT, function(res, v, k) {
+          if(k>=today){res.push({x: new Date(k), y: v.c})};
+        }, []));
+        setOptions(chartOptions);
+    });
+  },[]);
 
   return (
     <div className="VideoPlayer">
@@ -116,10 +117,10 @@ function VideoPlayer({}) {
       <div className="header fadeInUp" style={{animationDelay: '0.3s'}}>
         <h1>Video Player</h1>
       </div>
-      <HighchartsReact
+      { !isEmpty(options) && <HighchartsReact
         options={options}
         highcharts={Highcharts}
-      ></HighchartsReact>
+      ></HighchartsReact>}
       <Footer />
     </div>
   );
