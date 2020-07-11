@@ -270,7 +270,7 @@ function MapExplorer({
         {hidden: anchor && anchor !== 'mapexplorer'}
       )}
     >
-{/*
+      {/*
       {window.innerWidth > 769 && (
         <div
           className={classnames('anchor', {stickied: anchor === 'mapexplorer'})}

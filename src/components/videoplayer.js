@@ -99,6 +99,7 @@ function VideoPlayer({}) {
         if(VIDEO_PLAYER.showPredictions){
           chartOptions.series[1].fullData = data;
           chartOptions.series[1].data = (transform(res.data[highlightedDate].TT, function(res, v, k) {
+            if(VIDEO_PLAYER.predictionLookAhead && res.length >= VIDEO_PLAYER.predictionLookAhead)  return;
             if(k>=highlightedDate){res.push({x: new Date(k), y: v.c})};
           }, []));
         }

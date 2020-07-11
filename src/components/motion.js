@@ -7,6 +7,7 @@
 import {format} from 'date-fns';
 import Highcharts from 'highcharts/highstock';
 import {transform, isEmpty} from 'lodash';
+import {VIDEO_PLAYER} from '../constants'
 import 'font-awesome/css/font-awesome.min.css';
 
 // JSLint options:
@@ -265,6 +266,7 @@ import 'font-awesome/css/font-awesome.min.css';
 
   function updatePredictedCases(fullData, selectedDate){
     return transform(fullData, function(res, v, k) {
+      if(VIDEO_PLAYER.predictionLookAhead && res.length >= VIDEO_PLAYER.predictionLookAhead) return;
       if(k>=selectedDate){res.push({x: new Date(k), y: v.c})};
     }, []);
   }

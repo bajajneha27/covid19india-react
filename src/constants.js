@@ -474,5 +474,6 @@ export const INITIAL_DATA = {
 };
 
 export const VIDEO_PLAYER = {
-  showPredictions: true
+  showPredictions: true,
+  predictionLookAhead: 20
 }
