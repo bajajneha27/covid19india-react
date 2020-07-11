@@ -129,16 +129,14 @@ function Home(props) {
         <title>Coronavirus Projections for India - seva.ml</title>
         <meta name="title" content="Coronavirus Projections for India" />
       </Helmet>
-
       <div className="Home">
+        <Suspense fallback={<div />}>
+          <div className="Search">
+            <h1>{t('COVID-19 AI Predictions')}</h1>
+          </div>
+        </Suspense>
         <div className="home-left">
           <div className="header">
-            <Suspense fallback={<div />}>
-              <div className="Search">
-                <label>{t('COVID-19 AI Predictions')}</label>
-              </div>
-            </Suspense>
-
             {timeseries['TT'] && (
               <Suspense fallback={<div style={{minHeight: '56px'}} />}>
                 <Actions

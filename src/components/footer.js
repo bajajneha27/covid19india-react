@@ -7,7 +7,7 @@ function Footer(props) {
 
   return (
     <footer className="fadeInUp" style={{animationDelay: '2s'}}>
-      <h5>{t('We stand with everyone fighting on the frontlines')}</h5>
+      <h3>{t('Look forward and drive!')}</h3>
 
       <a
         href="https://www.facebook.com/indiacovidseva"
@@ -41,7 +41,7 @@ function Footer(props) {
         <span>{t('Open Sourced on GitHub')}</span>
       </a>
 
-      <h5>Based on covid19india.org</h5>
+      <h5>Built on covid19india.org</h5>
 
     </footer>
   );
