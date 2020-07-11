@@ -472,3 +472,7 @@ export const INITIAL_DATA = {
     notes: '',
   },
 };
+
+export const VIDEO_PLAYER = {
+  showPredictions: true
+}

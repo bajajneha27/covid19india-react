@@ -89,8 +89,12 @@ function Home(props) {
       axios.spread((...responses) => {
         const pastTimeseriesData = responses[0].data;
         const futureTimeseriesData = responses[1].data;
-        
-        const mergedTimeseriesData = merge(pastTimeseriesData, futureTimeseriesData, today);
+
+        const mergedTimeseriesData = merge(
+          pastTimeseriesData,
+          futureTimeseriesData,
+          today
+        );
         setTimeseries(mergedTimeseriesData);
       })
     );

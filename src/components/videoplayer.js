@@ -2,12 +2,13 @@ import {keys, transform, isEmpty} from 'lodash';
 import React, {useState, useEffect} from 'react';
 import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
+import axios from 'axios';
+import {format} from 'date-fns';
 import plugin from './motion.js';
 import {Helmet} from 'react-helmet';
 import Footer from './footer';
-import {format} from 'date-fns';
 import {formatNumber} from '../utils/commonfunctions';
-import axios from 'axios';
+import {VIDEO_PLAYER} from '../constants'
 
 function VideoPlayer({}) {
   const [options, setOptions] = useState({});
@@ -88,16 +89,22 @@ function VideoPlayer({}) {
     axios.get('https://vics-core.github.io/covid-api/vp/1.1740.json')
       .then(res => {
         const data = res.data;
+        const labels =  keys(data);
         chartOptions.series[0].fullData = data;
-        chartOptions.series[1].fullData = data;
-        chartOptions.motion.labels = keys(data);
-        const highlightedDate = chartOptions.motion.labels[0]
+        chartOptions.motion.labels = labels;
+        const highlightedDate = labels[labels.length - 1]
         chartOptions.series[0].data = (transform(res.data[highlightedDate].TT, function(res, v, k) {
           if(k<=highlightedDate){res.push({x: new Date(k), y: v.c})};
         }, []));
-        chartOptions.series[1].data = (transform(res.data[highlightedDate].TT, function(res, v, k) {
-          if(k>=highlightedDate){res.push({x: new Date(k), y: v.c})};
-        }, []));
+        if(VIDEO_PLAYER.showPredictions){
+          chartOptions.series[1].fullData = data;
+          chartOptions.series[1].data = (transform(res.data[highlightedDate].TT, function(res, v, k) {
+            if(k>=highlightedDate){res.push({x: new Date(k), y: v.c})};
+          }, []));
+        }
+        else{
+          chartOptions.yAxis.max = 40000
+        }
         setOptions(chartOptions);
     });
   },[]);
