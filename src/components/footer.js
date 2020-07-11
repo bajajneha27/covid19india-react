@@ -21,7 +21,7 @@ function Footer(props) {
       </div>
 
       <a
-        href="https://github.com/covid19india/covid19india-react"
+        href="https://github.com/VICS-CORE/covid19india-react"
         className="button github"
         target="_blank"
         rel="noopener noreferrer"
@@ -41,7 +41,7 @@ function Footer(props) {
       </a>
 
       <a
-        href="https://twitter.com/covid19indiaorg"
+        href="https://twitter.com/indiacovidseva"
         target="_blank"
         rel="noopener noreferrer"
         className="button twitter"
@@ -52,13 +52,14 @@ function Footer(props) {
       </a>
 
       <a
-        href="https://bit.ly/covid19crowd"
-        className="button telegram"
+        href="https://www.facebook.com/indiacovidseva"
         target="_blank"
         rel="noopener noreferrer"
+        className="button facebook"
+        style={{justifyContent: 'center'}}
       >
-        <Icon.MessageCircle />
-        <span>{t('Join Telegram to Collaborate!')}</span>
+        <Icon.Facebook />
+        <span>{t('Like us on Facebook')}</span>
       </a>
     </footer>
   );
