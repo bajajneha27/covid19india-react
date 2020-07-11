@@ -7,6 +7,7 @@
 import {format} from 'date-fns';
 import Highcharts from 'highcharts/highstock';
 import {transform, isEmpty} from 'lodash';
+import {VIDEO_PLAYER} from '../constants'
 import 'font-awesome/css/font-awesome.min.css';
 
 // JSLint options:
@@ -235,7 +236,6 @@ import 'font-awesome/css/font-awesome.min.css';
     let series;
     let data;
     const roundedInput = this.options.labels[this.round(inputValue)];
-    const today = format(new Date(), 'yyyy-MM-dd');
     if (this.currentAxisValue !== roundedInput) {
       this.currentAxisValue = roundedInput;
       this.chart.options.motion.startIndex = roundedInput;
@@ -245,10 +245,10 @@ import 'font-awesome/css/font-awesome.min.css';
           if (isEmpty(series.options.fullData)) return;
           const fullData = series.options.fullData[roundedInput].TT;
           if(seriesKey === '0'){
-            data = updateConfirmedCases(fullData, today);
+            data = updateConfirmedCases(fullData, roundedInput);
           }
           else if(seriesKey === '1'){
-            data = updatePredictedCases(fullData, today);
+            data = updatePredictedCases(fullData, roundedInput);
           }
           series.setData(data);
         }
@@ -258,15 +258,16 @@ import 'font-awesome/css/font-awesome.min.css';
     }
   };
 
-  function updateConfirmedCases(fullData, today){
+  function updateConfirmedCases(fullData, selectedDate){
     return transform(fullData, function(res, v, k) {
-      if(k<=today){res.push({x: new Date(k), y: v.c})};
+      if(k<=selectedDate){res.push({x: new Date(k), y: v.c})};
     }, [])    
   }
 
-  function updatePredictedCases(fullData, today){
+  function updatePredictedCases(fullData, selectedDate){
     return transform(fullData, function(res, v, k) {
-      if(k>=today){res.push({x: new Date(k), y: v.c})};
+      if(VIDEO_PLAYER.predictionLookAhead && res.length >= VIDEO_PLAYER.predictionLookAhead) return;
+      if(k>=selectedDate){res.push({x: new Date(k), y: v.c})};
     }, []);
   }
 

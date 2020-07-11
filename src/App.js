@@ -22,14 +22,8 @@ import ReactDOM from 'react-dom';
 const Home = lazy(() =>
   import('./components/home' /* webpackChunkName: "Home" */)
 );
-const Demographics = lazy(() =>
-  import('./components/demographics' /* webpackChunkName: "Demographics" */)
-);
 const State = lazy(() =>
   import('./components/state' /* webpackChunkName: "State" */)
-);
-const Essentials = lazy(() =>
-  import('./components/essentials' /* webpackChunkName: "Essentials" */)
 );
 
 const LanguageSwitcher = lazy(() =>
@@ -67,18 +61,6 @@ function App() {
       pageLink: '/',
       view: Home,
       displayName: 'Home',
-      showInNavbar: true,
-    },
-    {
-      pageLink: '/demographics',
-      view: Demographics,
-      displayName: 'Demographics',
-      showInNavbar: true,
-    },
-    {
-      pageLink: '/essentials',
-      view: Essentials,
-      displayName: 'Essentials',
       showInNavbar: true,
     },
     {

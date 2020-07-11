@@ -100,16 +100,6 @@ function Navbar({
               </Link>
             </span>
             <span>
-              <Link to="/demographics">
-                <Icon.Users {...activeNavIcon('/demographics')} />
-              </Link>
-            </span>
-            <span>
-              <Link to="/essentials">
-                <Icon.Package {...activeNavIcon('/essentials')} />
-              </Link>
-            </span>
-            <span>
               <Link to="/about">
                 <Icon.HelpCircle {...activeNavIcon('/about')} />
               </Link>
