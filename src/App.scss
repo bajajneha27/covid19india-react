@@ -1,6 +1,8 @@
 // Color Pallete
 
 $blue: #007bff;
+$blue-fb: #3b5998;
+$blue-fb-hover: #4a72c9;
 $blue-light: #007bff10;
 $blue-hover: #007bff30;
 $blue-light-opaque: #eff7ff;
@@ -1589,6 +1591,25 @@ h6 {
 
 .twitter {
   width: 15.5rem;
+  color: $white;
+  background: $blue-mid;
+
+  &:hover {
+    background: $pblue-mid;
+  }
+}
+
+.facebook {
+  background: $blue-fb !important;
+  color: #fff !important;
+  justify-content: center;
+  padding-left: 0.65rem;
+  transition: all 0.2s ease-in-out;
+  width: 15.5rem;
+
+  &:hover {
+    background: $blue-fb-hover !important;
+  }
 }
 
 .excel {
