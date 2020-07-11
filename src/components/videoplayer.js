@@ -10,7 +10,6 @@ import {formatNumber} from '../utils/commonfunctions';
 import axios from 'axios';
 
 function VideoPlayer({}) {
-  const today = format(new Date(), 'yyyy-MM-dd')
   const [options, setOptions] = useState({});
 
   const chartOptions = {
@@ -94,10 +93,10 @@ function VideoPlayer({}) {
         chartOptions.motion.labels = keys(data);
         const highlightedDate = chartOptions.motion.labels[0]
         chartOptions.series[0].data = (transform(res.data[highlightedDate].TT, function(res, v, k) {
-          if(k<=today){res.push({x: new Date(k), y: v.c})};
+          if(k<=highlightedDate){res.push({x: new Date(k), y: v.c})};
         }, []));
         chartOptions.series[1].data = (transform(res.data[highlightedDate].TT, function(res, v, k) {
-          if(k>=today){res.push({x: new Date(k), y: v.c})};
+          if(k>=highlightedDate){res.push({x: new Date(k), y: v.c})};
         }, []));
         setOptions(chartOptions);
     });

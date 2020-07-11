@@ -56,7 +56,8 @@ function merge(past, future, today) {
       merged[st][dt]['delta'] = future[st][dt]['delta'];
       merged[st][dt]['total'] = {};
       for (const k in merged[st][dt]['delta']) {
-        merged[st][dt]['total'][k] = merged[st][dt_minus_1]['total'][k] + merged[st][dt]['delta'][k]
+        merged[st][dt]['total'][k] =
+          merged[st][dt_minus_1]['total'][k] + merged[st][dt]['delta'][k];
       }
     }
   }
