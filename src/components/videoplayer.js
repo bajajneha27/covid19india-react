@@ -12,7 +12,12 @@ import './motion.js';
 function VideoPlayer() {
   const [options, setOptions] = useState({});
   const queryStringParams = queryString.parse(window.location.search);
-  const model = queryStringParams && queryStringParams.model ? queryStringParams.model : '1.1740'
+  const model =
+    queryStringParams && queryStringParams.model
+      ? queryStringParams.model
+      : '1.1740';
+  const models =
+    [model, model, model,  model,  model];
 
   useEffect(() => {
     axios
@@ -36,7 +41,7 @@ function VideoPlayer() {
         setOptions(chartOptions);
       })
       .catch((error) => {
-        alert(`The model ${model} does not exist.`)
+        alert(`The model ${model} does not exist.`);
       });
   }, []);
 
@@ -68,10 +73,21 @@ function VideoPlayer() {
       <div className="header fadeInUp" style={{animationDelay: '0.3s'}}>
         <h1>Video Player</h1>
       </div>
-      { !isEmpty(options) && <HighchartsReact
-        options={options}
-        highcharts={Highcharts}
-      ></HighchartsReact>}
+      <div className="models">
+        { models.map((model, index) => {
+          return (
+            !isEmpty(options) && (
+              <div className="model">
+                <HighchartsReact
+                  options={options}
+                  highcharts={Highcharts}
+                  key={index}
+                ></HighchartsReact>
+              </div>
+            )
+          )
+        })}
+      </div>
       <Footer />
     </div>
   );

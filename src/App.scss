@@ -3431,6 +3431,17 @@ footer {
   margin-left: 6.5rem;
   margin-right: 5rem;
 
+  .models {
+    display: flex;
+    flex-wrap: wrap;
+    flex-grow: 1;
+  }
+
+  .model {
+    flex-grow: 1;
+    min-width: 300px;
+    flex-basis: 200px;
+  }
 
   div {
     #play-controls {
