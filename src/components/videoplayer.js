@@ -1,12 +1,14 @@
-import {keys, transform, isEmpty} from 'lodash';
-import React, {useState, useEffect} from 'react';
-import Highcharts from 'highcharts/highstock';
-import HighchartsReact from 'highcharts-react-official';
-import axios from 'axios';
-import {Helmet} from 'react-helmet';
-import Footer from './footer';
 import {chartOptions} from './constants/chart-options';
+import Footer from './footer';
+
+import axios from 'axios';
+import HighchartsReact from 'highcharts-react-official';
+import Highcharts from 'highcharts/highstock';
+import {keys, transform, isEmpty} from 'lodash';
 import queryString from 'query-string';
+import React, {useState, useEffect} from 'react';
+import {Helmet} from 'react-helmet';
+
 import './motion.js';
 
 function VideoPlayer() {
@@ -17,13 +19,21 @@ function VideoPlayer() {
       ? queryStringParams.model
       : '1.1740';
   const models =
-    [model, model, model,  model,  model];
+    queryStringParams && queryStringParams.model
+      ? queryStringParams.model.split(',')
+      : ['1.1740'];
 
   useEffect(() => {
+    const requests = [];
+    for (const model of models) {
+      requests.push(
+        axios.get(`https://vics-core.github.io/covid-api/vp/${model}.json`)
+      );
+    }
     axios
-      .get(`https://vics-core.github.io/covid-api/vp/${model}.json`)
+      .all(requests)
       .then((response) => {
-        const data = response.data;
+        const data = response[0].data;
         const labels = keys(data);
         const highlightedDate = labels[labels.length - 1];
         chartOptions.motion.labels = labels;
@@ -43,7 +53,7 @@ function VideoPlayer() {
       .catch((error) => {
         alert(`The model ${model} does not exist.`);
       });
-  }, []);
+  }, [model, models]);
 
   function updatePredictedCases(data, highlightedDate) {
     if (data[highlightedDate]) {
@@ -74,18 +84,17 @@ function VideoPlayer() {
         <h1>Video Player</h1>
       </div>
       <div className="models">
-        { models.map((model, index) => {
+        {models.map((model, index) => {
           return (
             !isEmpty(options) && (
-              <div className="model">
+              <div className="model" key={index}>
                 <HighchartsReact
                   options={options}
                   highcharts={Highcharts}
-                  key={index}
                 ></HighchartsReact>
               </div>
             )
-          )
+          );
         })}
       </div>
       <Footer />
