@@ -5414,6 +5414,7 @@ footer {
 
 div#prediction-control {
   margin-top: 1.5rem;
+  width: -webkit-fill-available;
   display: flex;
   flex-direction: row;
   justify-content: center;

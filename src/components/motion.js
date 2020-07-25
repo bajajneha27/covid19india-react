@@ -95,7 +95,7 @@ import 'font-awesome/css/font-awesome.min.css';
         id: 'prediction-control',
       },
       null,
-      this.chart.renderTo,
+      this.chart.renderTo.parentElement.parentElement,
       null
     );
 
