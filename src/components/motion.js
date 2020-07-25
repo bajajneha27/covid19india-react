@@ -36,7 +36,7 @@ import 'font-awesome/css/font-awesome.min.css';
         id: 'play-controls',
       },
       null,
-      this.chart.renderTo,
+      this.chart.renderTo.parentElement.parentElement,
       null
     );
 
@@ -314,14 +314,12 @@ import 'font-awesome/css/font-awesome.min.css';
 
   // Updates chart data and redraws the chart
   Motion.prototype.updateChart = function (inputValue) {
-    let seriesKey;
-    let series;
-    let data;
     const roundedInput = this.options.labels[this.round(inputValue)];
-    let predictionControl = filter(
-      [this.noPrediction, this.shortTermPrediction, this.longTermPrediction],
-      'checked'
-    )[0] || this.longTermPrediction;
+    let predictionControl =
+      filter(
+        [this.noPrediction, this.shortTermPrediction, this.longTermPrediction],
+        'checked'
+      )[0] || this.longTermPrediction;
     predictionControl = predictionControl.value;
     if (
       this.currentAxisValue !== roundedInput ||
@@ -330,29 +328,30 @@ import 'font-awesome/css/font-awesome.min.css';
       this.currentAxisValue = roundedInput;
       this.predictionControl.value = predictionControl;
       this.chart.options.motion.startIndex = roundedInput;
-      H.each(H.charts, function(chart,index){
-        H.each(chart.series, function(series,i){
-          const fullData =
-            chart.options.chart.fullData &&
-            chart.options.chart.fullData[roundedInput].TT;
-          if (isEmpty(fullData)) return;
-          if (i === 0) {
-            data = updateConfirmedCases(fullData, roundedInput);
-          } else if (i === 1) {
-            data = updatePredictedCases(
-              fullData,
-              roundedInput,
-              predictionControl
-            );
-          }
-          series.setData(data);
-        })
+      H.each(H.charts, function (chart, index) {
+        updateChartSeries(chart, roundedInput, predictionControl);
         updateYAxis(predictionControl);
         chart.redraw();
-      })
+      });
       this.attractToStep();
     }
   };
+
+  function updateChartSeries(chart, roundedInput, predictionControl) {
+    let data;
+    H.each(chart.series, function (series, i) {
+      const fullData =
+        chart.options.chart.fullData &&
+        chart.options.chart.fullData[roundedInput].TT;
+      if (isEmpty(fullData)) return;
+      if (i === 0) {
+        data = updateConfirmedCases(fullData, roundedInput);
+      } else if (i === 1) {
+        data = updatePredictedCases(fullData, roundedInput, predictionControl);
+      }
+      series.setData(data);
+    });
+  }
 
   function updateYAxis(predictionControl) {
     const max = isNaN(predictionControl) ? 175000 : 40000;
@@ -411,7 +410,11 @@ import 'font-awesome/css/font-awesome.min.css';
   // Initiates motion automatically if motion options object exists and
   // is not disabled
   H.Chart.prototype.callbacks.push(function (chart) {
-    if (chart.options.motion && chart.options.motion.enabled) {
+    if (
+      chart.options.motion &&
+      chart.options.motion.enabled &&
+      H.charts.length === 1
+    ) {
       chart.motion = new Motion(chart);
     }
   });
