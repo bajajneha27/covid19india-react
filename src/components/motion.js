@@ -24,14 +24,10 @@ import 'font-awesome/css/font-awesome.min.css';
     this.chart = chart;
     this.paused = true;
     this.options = H.merge(this.defaultOptions, this.chart.options.motion);
-    this.dataSeries = [];
     this.dataLength = 0;
     this.options.startIndex = 0;
     motion.options.series = H.splat(motion.options.series);
     motion.dataLength = motion.options.labels.length;
-    Highcharts.each(this.chart.series, function (series, index) {
-      motion.dataSeries[index] = series;
-    });
 
     // Play-controls HTML-div
     this.playControls = H.createElement(
@@ -322,10 +318,11 @@ import 'font-awesome/css/font-awesome.min.css';
     let series;
     let data;
     const roundedInput = this.options.labels[this.round(inputValue)];
-    const predictionControl = filter(
+    let predictionControl = filter(
       [this.noPrediction, this.shortTermPrediction, this.longTermPrediction],
       'checked'
-    )[0].value;
+    )[0] || this.longTermPrediction;
+    predictionControl = predictionControl.value;
     if (
       this.currentAxisValue !== roundedInput ||
       this.predictionControl.value !== predictionControl
@@ -333,16 +330,15 @@ import 'font-awesome/css/font-awesome.min.css';
       this.currentAxisValue = roundedInput;
       this.predictionControl.value = predictionControl;
       this.chart.options.motion.startIndex = roundedInput;
-      for (seriesKey in this.dataSeries) {
-        if (this.dataSeries.hasOwnProperty(seriesKey)) {
-          series = this.dataSeries[seriesKey];
+      H.each(H.charts, function(chart,index){
+        H.each(chart.series, function(series,i){
           const fullData =
-            this.chart.options.chart.fullData &&
-            this.chart.options.chart.fullData[roundedInput].TT;
+            chart.options.chart.fullData &&
+            chart.options.chart.fullData[roundedInput].TT;
           if (isEmpty(fullData)) return;
-          if (seriesKey === '0') {
+          if (i === 0) {
             data = updateConfirmedCases(fullData, roundedInput);
-          } else if (seriesKey === '1') {
+          } else if (i === 1) {
             data = updatePredictedCases(
               fullData,
               roundedInput,
@@ -350,10 +346,10 @@ import 'font-awesome/css/font-awesome.min.css';
             );
           }
           series.setData(data);
-        }
-      }
-      updateYAxis(predictionControl);
-      this.chart.redraw();
+        })
+        updateYAxis(predictionControl);
+        chart.redraw();
+      })
       this.attractToStep();
     }
   };
