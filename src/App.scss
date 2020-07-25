@@ -3451,23 +3451,30 @@ footer {
       flex-wrap: wrap;
       justify-content: space-between;
       margin-right: 2rem;
-      align-items: center
+      align-items: center;
+      width: -webkit-fill-available;
 
-      button#play-pause-button {
-        width: 3%;
-        height: 35px;
-        cursor: pointer;
+      button {
+        &#play-pause-button {
+          width: 5%;
+          height: 30px;
+          cursor: pointer;
+        }
       }
 
-      input#play-range {
-        width: 90%;
-        cursor: pointer;
+      input {
+        &#play-range {
+          width: 80%;
+          cursor: pointer;
+        }
       }
 
-      label#play-output {
-        font-family: 'Lucida Grande';
-        color: $gray;
-        font-size: small;
+      label {
+        &#play-output {
+          font-family: 'Lucida Grande';
+          color: $gray;
+          font-size: small;
+        }
       }
     }
   }
@@ -5012,6 +5019,10 @@ footer {
   .VideoPlayer {
     margin-left: unset;
     margin-right: 1rem;
+
+    button#play-pause-button {
+      width: 9% !important;
+    }
 
     input#play-range {
       width: 60% !important;
