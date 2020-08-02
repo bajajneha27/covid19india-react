@@ -57,7 +57,7 @@ function VideoPlayer() {
         );
       }
     }
-  }, [models]);
+  }, []);
 
   function updateConfirmedCases(option, highlightedDate) {
     option.series[0].data = transform(
