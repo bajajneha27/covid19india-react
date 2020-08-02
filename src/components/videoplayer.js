@@ -42,6 +42,21 @@ function VideoPlayer() {
       });
       setOptions(ops);
     });
+
+    function updatePredictedCases(option, highlightedDate) {
+      const data = option.chart.fullData;
+      if (data[highlightedDate]) {
+        option.series[1].data = transform(
+          data[highlightedDate].TT,
+          function (res, v, k) {
+            if (k >= highlightedDate) {
+              res.push(createSeriesData(k, v));
+            }
+          },
+          []
+        );
+      }
+    }
   }, [models]);
 
   function updateConfirmedCases(option, highlightedDate) {
@@ -56,19 +71,8 @@ function VideoPlayer() {
     );
   }
 
-  function updatePredictedCases(option, highlightedDate) {
-    const data = option.chart.fullData;
-    if (data[highlightedDate]) {
-      option.series[1].data = transform(
-        data[highlightedDate].TT,
-        function (res, v, k) {
-          if (k >= highlightedDate) {
-            res.push({x: new Date(k), y: v.c});
-          }
-        },
-        []
-      );
-    }
+  function createSeriesData(key, value) {
+    return {x: new Date(key), y: value.c};
   }
 
   return (
